@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>Base64、Blob、ArrayBuffer间的转换</title>
+    <style>
+      #base64,
+      #arraybuffer {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 20;
+        border-bottom: 1px dashed black;
+        overflow: hidden;
+        word-wrap: break-word;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="file" id="file" />
+    <div>base64:</div>
+    <div id="base64"></div>
+    <div>arraybuffer:</div>
+    <div id="arraybuffer"></div>
+
+    <button id="btn-base2blob">base64转blob</button>
+    <img id="img-base2blob" />
+    <button id="btn-ab2blob">arraybuffer转blob</button>
+    <img id="img-ab2blob" />
+  </body>
+  <script>
+    window.addEventListener('load', function() {
+      funcAboutDataTransform();
+    });
+
+    function funcAboutDataTransform() {
+      var base64 = document.querySelector("#base64");
+      var arraybuffer = document.querySelector("#arraybuffer");
+      var input = document.querySelector("#file");
+
+      input.addEventListener("change", function(e) {
+
+        // this.files返回FileList对象，具有item方法，根据指定索引获取File对象，以及length属性，获取文件数
+        // this.files.item(0)返回第一个File对象，具有属性如下，
+        // lastModified: 文件最近一次的修改时间时间戳
+        // lastModifiedDate: 文件最近一次的修改时间Date对象
+        // name: 文件名，含后缀
+        // size: 文件大小，单位为B
+        // type: 文件MIME类型，如"image/jpeg"
+        // webkitRelativePath: 文件相对于用户选中的目录的相对路径，非标准，不推荐生产使用
+        console.log(this);
+        var file = this.files.item(0);
+        console.log(file instanceof Blob); //true，说明Blob是File的基类
+
+        blobToB64(file, function(res) {
+          base64.innerHTML = res;
+        });
+
+        blobToAb(file, function(res) {
+          // arraybuffer不能直接打印出来，需要通过TypedArray、DataView进行打印
+          var arr = new Uint8Array(res);
+          var str = "";
+          for (let i = 0, len = arr.length; i < len; i++) {
+            str += arr[i] + ' ';
+          }
+          str = str.substring(0, str.length - 1);
+          arraybuffer.innerHTML = str;
+        });
+
+      });
+
+      var btnBase2blob = document.querySelector("#btn-base2blob");
+      var imgBase2blob = document.querySelector("#img-base2blob");
+      var btnAb2blob = document.querySelector("#btn-ab2blob");
+      var imgAb2blob = document.querySelector("#img-ab2blob");
+
+      btnBase2blob.addEventListener('click', function() {
+        // base64 -> blob -> base64
+        var blob = b64ToBlob(base64.innerHTML);
+        blobToB64(blob, function(res) {
+          imgBase2blob.src = res;
+          imgBase2blob.title = '我的女神';
+        })
+      });
+
+      btnAb2blob.addEventListener('click', function() {
+        // base64 - > ab -> blob -> ab -> b64
+        b64ToAb(base64.innerHTML, function(arraybuffer) {
+          var blob = abToBlob(arraybuffer);
+          blobToAb(blob, function(res) {
+            abToB64(res, function(result) {
+              imgAb2blob.src = result;
+              imgAb2blob.title = '我的女神2';
+            });
+          })
+        });
+      });
+    }
+
+    //文件二进制格式Blob/File转base64格式
+    function blobToB64(blob, cb) {
+      var reader = new FileReader();
+      reader.addEventListener('load', function() {
+        cb && cb(reader.result);
+      });
+      reader.readAsDataURL(blob, {
+        type: blob.type
+      });
+    }
+
+    //文件二进制格式Blob/File转ArrayBuffer
+    function blobToAb(blob, cb) {
+      var reader = new FileReader();
+      reader.addEventListener('load', function() {
+        cb && cb(reader.result);
+      });
+      reader.readAsArrayBuffer(blob);
+    }
+
+    //文件ArrayBuffer转二进制格式Blob/File
+    function abToBlob(arraybuffer, filename) {
+      var u8arr = new Uint8Array(arraybuffer);
+      if (filename) {
+        return new File([u8arr], filename);
+      } else {
+        return new Blob([u8arr])
+      }
+    }
+
+    //文件base64格式转二进制格式Blob/File
+    function b64ToBlob(base64, filename) {
+      var arr = base64.split(',');
+      var mime = arr[0].match(/:(.*?);/)[1];
+
+      var bstr = atob(arr[1]);
+      var i = bstr.length;
+      var u8arr = new Uint8Array(i);
+      while (i--) {
+        u8arr[i] = bstr.charCodeAt(i);
+      }
+
+      if (filename) {
+        return new File([u8arr], filename, {
+          type: mime
+        });
+      } else {
+        return new Blob([u8arr], {
+          type: mime
+        })
+      }
+    }
+
+    //文件base64格式转ArrayBuffer
+    function b64ToAb(base64, cb) {
+      blobToAb(b64ToBlob(base64), cb);
+    }
+
+    //文件ArrayBuffer转base64格式
+    function abToB64(arraybuffer, cb) {
+      blobToB64(abToBlob(arraybuffer), cb);
+    }
+  </script>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>16进制字符串与普通字符串间转换</title>
+  </head>
+  <body>
+    <h3>16进制字符串与普通字符串间转换</h3>
+  </body>
+  <script>
+    window.addEventListener('load', function() {
+      // Uncaught InvalidCharacterError: Failed to execute 'btoa' on 'Window': 
+      // The string to be encoded contains characters outside of the Latin1 range.
+      // let base64 = btoa('😊');
+      let base64 = btoaUTF16('😊');
+      console.log(base64);
+
+      let str = atobUTF16(base64);
+      console.log(str);
+    });
+
+    function btoaUTF16(str) {
+      var u16Arr = new Uint16Array(str.length);
+      Array.prototype.forEach.call(u16Arr, function(el, idx, arr) {
+        arr[idx] = str.charCodeAt(idx);
+      });
+      return btoa(String.fromCharCode.apply(null, new Uint8Array(u16Arr.buffer)));
+    }
+
+    function atobUTF16(base64) {
+      var binary = atob(base64);
+      var u8Arr = new Uint8Array(binary.length);
+      Array.prototype.forEach.call(u8Arr, function(el, idx, arr) {
+        arr[idx] = binary.charCodeAt(idx);
+      });
+      return String.fromCharCode.apply(null, new Uint16Array(u8Arr.buffer));
+    }
+  </script>
+</html>

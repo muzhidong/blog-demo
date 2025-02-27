@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    
+    <!-- <base href="https://www.baidu.com" target="_self" /> -->
+    <base href="./语义" target="_blank" />
+    <!-- <base href="http://localhost:52330/语义/" target="_blank" /> -->
+    
+    <title>HTML5 语义化标签</title>
+    
+    <meta name="keywords" content="HTML5  语义化标签">
+    <meta name="description" content="一个初学者的写的第一张HTML5移动网页`">
+    <meta name="author" content="greatApe">
+    
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=0">
+
+    <!-- 预加载 -->
+		<link rel="preload" href="./loading.gif" as="image" />
+    <link rel="icon" href="./loading.gif" />
+    <link rel="dns-prefetch" href="https://www.baidu.com" crossorigin="anonymous" /> 
+
+    <style type="text/css">
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        /*根据设备宽度动态设置字体大小*/
+        font-size:16px;
+        /* 可以参考张鑫旭的全局字体配置 */
+        /* font-family: '宋体'; */
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        display: inline;
+      }
+
+      header,
+      footer,
+      nav,
+      article,
+      section,
+      aside {
+        display: block;
+      }
+
+      /* 头部 */
+      header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 3rem;
+        background: linear-gradient(to bottom right, black, #2F8DD1);
+        z-index: 99;
+      }
+
+      header>img {
+        height: 100%;
+        /* 透明度对图片有效 */
+        filter: opacity(0.9);
+        opacity: 0.9;
+        /* 曾提过希望img能用类似background-size的样式，这个可以考虑 */
+        object-fit: contain;
+      }
+
+      .header-content {
+        float: right;
+        padding-right: 1rem;
+        line-height: 3rem;
+        height: 3rem;
+      }
+
+      .header-content span {
+        color: white;
+        letter-spacing: 0.2rem;
+      }
+
+      .header-content>span>a {
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+        font-size: 1rem;
+      }
+
+      /* 主体 */
+      #main {
+        padding-top: 3rem;
+        font-size: 1rem;
+      }
+
+      #main>nav {
+        font-size: 1.5rem;
+        padding-bottom: .5rem;
+      }
+
+      #main>nav>ul>li { 
+        border: white solid .1rem;
+        text-align: center;
+        border-radius: .5rem;
+        background: #75BFF5;
+      }
+
+      #main>article {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        padding-bottom: .5rem;
+        font-size: 1.2rem;
+      }
+
+      #main>article>aside{
+        width: 20%;
+        flex-grow: 0;
+        flex-shrink: 0;
+      }
+
+      #main>article>div{
+        flex-grow: 1;
+        flex-shrink: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      #main>form{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 10px;
+      }
+
+      #main>form>div,output,keygen,button{
+        margin-top: 10px;
+      }
+
+      /* 尾部 */
+      footer {
+        color: white;
+        font-size: 1rem;
+        background: black;
+      }
+      footer>table>tbody>tr>td{
+        padding: 2px 5px;
+      }
+      footer>table>tbody>tr:first-child>td{
+        border-bottom: 1px solid white;
+      }
+      footer>table>tbody>tr>td:not(:nth-child(4)){
+        border-right: 1px solid white;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 以下备注都是在Chrome浏览器的测试结果 -->
+    <header>
+      <!--width相对父元素宽度，height相对父元素高度-->
+      <img alt="logo" src="https://www.npmjs.com/npm-avatar/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdmF0YXJVUkwiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci8zNDc3MDAwODU1N2RjNjFkMTA2ZGMwMWEyZDcwNTgxZT9zaXplPTEwMCZkZWZhdWx0PXJldHJvIn0.pbHfHru4Bfjf4aG7RfEq60b5j85HP01J4NO482M5vpU">
+      <div class="header-content">
+        <span>
+          <a href="./语义化标签示例.html">登录</a>
+          |<a href="javascript:void(0)">注册</a>
+        </span>
+      </div>
+    </header>
+
+    <main id="main">
+      <nav>
+        <ul style="list-style:none;display:flex;flex-direction:row;flex-wrap:nowrap;overflow-x: scroll;">
+          <li>HTML5</li>
+          <li>CSS3</li>
+          <li>ECMAScript6</li>
+          <li>JQuery</li>
+          <li>Bootstrap</li>
+          <li>Angular</li>
+          <li>Vue</li>
+          <li>React</li>
+        </ul>
+      </nav>
+
+      <article>
+        <aside style="background:#EEDD22;">左边栏，这是aside标签</aside>
+        <div>
+          这是一篇文章
+          <section>章节1，这是section标签</section>
+          <section>章节2</section>
+          <section>章节3</section>
+        </div>
+        <aside style="background:#EEDD22;">右边栏</aside>
+      </article>
+
+      <hr/>
+      
+      <form id="test">
+        <div>
+          number：
+          <input type="number" max="20" min="-20" step="5" 
+            autofocus required placeholder="number">
+        </div>
+        <div>range：<input type="range" placeholder="range"/></div>
+
+        <div>text：<input type="text" placeholder="text"/></div>
+        <div>password：<input type="password" placeholder="password"/></div>
+
+        <div>radio：<input type="radio" placeholder="radio"/></div>
+        <div>checkbox：<input type="checkbox" placeholder="checkbox"/></div>
+        <div>file：<input type="file" placeholder="file"/></div>
+        <div>image：<input type="image" placeholder="image"/></div>
+
+        <div>month：<input type="month" placeholder="month"/></div>
+        <div>week：<input type="week" placeholder="week"/></div>
+        <div><del>datetime（废弃）：<input type="datetime" placeholder="datetime"/></del></div>
+        <div>datetime-local：<input type="datetime-local" placeholder="datetime-local" /></div>
+        <div>date：<input type="date" placeholder="date"/></div>
+        <div>time：<input type="time" placeholder="time"/></div>
+        
+        <!-- bug：校验时机是点提交后，输入变化时 -->
+        <div>tel：
+          <input type="tel" required maxlength="11" placeholder="tel" 
+            pattern="1[3-8][0-9]{9}" title="请输入正确的手机号" />
+        </div>
+        <div>url：<input type="url" placeholder="url" /></div>
+        <div>email：<input type="email" placeholder="email" /></div>
+        
+        <div>
+          search(与datalist元素配合，支持模糊搜索)：
+          <input type="search" list="which" placeholder="search" />
+          <!-- 这种写法位置会脱离 -->
+          <datalist id="which">
+            <option>男人</option>
+            <option>女人</option>
+            <option>小孩</option>
+            <option>老人</option>
+          </datalist>
+          <br/>
+          <span>关于datalist元素说明：规定输入的选项列表。input可通过list新属性指定其id进行绑定。list属性提示文本框输入，提示的数据源由datalist标签提供，存在浏览器兼容问题</span>
+        </div>
+        
+        <div>color：<input type="color" />（可以写个脚本作为拾色器）</div>
+
+        <!-- form属性未生效？ -->
+        <div>button： <input type="button" value="提交" form="test" /></div>
+        <div>submit <input type="submit" /></div>
+        <div>reset： <input type="reset" /></div>
+
+        <div>hidden: <input type="hidden" />隐藏的input可以做一些不希望用户看到的操作？</div>
+      </form>
+      
+      <hr/>
+
+      <ul style="padding:10px;list-style:none;">
+        <li>mark标签：
+          <mark>做个标记</mark>
+        </li>
+        <li>button标签：
+          <button>按钮来了</button>
+        </li>
+        <li>meter标签：
+          <meter min="0" 
+            max="10" 
+            lower="2" 
+            higher="8"
+            optimum="7" 
+            value="6"></meter>
+        </li>
+        <li>progress标签：
+          <progress max="100" value="80"></progress>
+        </li>
+        <li>source标签（一般用于媒体标签配合使用，指定媒体源）：
+          <source>源标签是行内标签</source>
+        </li>
+        <li>hgroup标签：
+          <hgroup>
+            <h1>用于</h1>
+            <h2>包含</h2>
+            <h3>h1、h2、h3、h4、h5、h6</h3>
+            <h4>等</h4>
+            <h5>标题</h5>
+            <h6>标签</h6>
+          </hgroup>
+        </li>
+        <li>details标签：
+          <details>详情标签是块标签</details>
+        </li>
+        <li>dialog标签：
+          <dialog open hidden>
+            <h3>这是一个对话框</h3>
+            <p>通过open属性打开的是非对话框，建议通过<code>HTMLDialogElement.showModal()</code>方式打开</p>
+          </dialog>
+        </li>
+        <li>summary标签：
+          <summary>summary元素是块标签</summary>
+        </li>
+        <li>time标签：
+          <time datetime="2023-03-10T03:00:00">03:00</time>
+        </li>
+        <li>output标签：
+          <output>output标签是行内标签</output>
+        </li>
+        <li>
+          <del>
+            keygen标签（废弃）：
+            <keygen>keygen是行内标签</keygen>
+          </del>
+        </li>
+
+      </ul>
+    </main>
+
+    <footer>
+      <p style="text-align:center;padding:.5rem 0;">@copyright HTML5培训腾讯有限公司</p>
+      <table style="margin:0 auto 1rem;text-align:center">
+        <tr>
+          <td>阿里巴巴</td>
+          <td>百度</td>
+          <td>美团</td>
+          <td>滴滴打车</td>
+        </tr>
+        <tr>
+          <td>今日头条</td>
+          <td>共享单车OFO</td>
+          <td>唯品会</td>
+          <td>京东</td>
+        </tr>
+      </table>
+    </footer>
+
+    <style>
+      .one {
+        list-style: none;
+      }
+      .two {
+        list-style: none inside "😊";
+      }
+      .three {
+        list-style: url(./loading.gif) inside none;
+      }
+      .four {
+        list-style: linear-gradient(to right bottom, red , blue) outside none;
+      }
+    </style>
+    <div style="margin:10px;padding:20px;">
+      <ol start="26" type="A" reversed>
+        <li>HTML5</li>
+        <li>CSS3</li>
+        <li>ECMAScript6</li>
+        <li>JQuery</li>
+        <li>Bootstrap</li>
+        <li>Angular</li>
+        <li>Vue</li>
+        <li>React</li>
+      </ol>
+      <ul class="one">
+        <li>早上</li>
+        <li>中午</li>
+        <li>晚上</li>
+      </ul>
+      <ul class="two">
+        <li>QQ</li>
+        <li>微信</li>
+        <li>淘宝</li>
+        <li>微博</li>
+      </ul>
+      <ul class="three">
+        <li>apple</li>
+        <li>banana</li>
+      </ul>
+      <ul class="four">
+        <li>QQ</li>
+        <li>微信</li>
+        <li>淘宝</li>
+        <li>微博</li>
+      </ul>
+      <dl>
+        <dt>标题1</dt>
+        <dd>描述1</dd>
+        <dt>标题2，可选</dt>
+        <dd>描述2</dd>
+        <dt>标题3，可选</dt>
+        <dd>描述3</dd>
+      </dl>
+      <!-- FIXME:srcset/sizes跟预期不太一样 -->
+      <img
+        src="./loading.gif"
+        alt="Test"
+        srcset="./logo.jpeg 2x,./avatar.jpg 3x" />
+      <img
+        src="./loading.gif"
+        alt="Test2"
+        srcset="./logo.jpeg 375w, ./avatar.jpg 768w"
+        sizes="(max-width: 768px) 375px, 768px" />
+      <a href="http://www.baidu.com" ping="https://www.baidu.com" >测试</a>
+    </div>
+    <form autocomplete="on" method="post" action="https://www.baidu.com" novalidate target="_blank">
+      <!-- <input type="submit" /> -->
+      <input type="number" />
+      <button type="submit">提交</button>
+    </form>
+
+    <!-- 分组下拉菜单 -->
+    <select name="menu">
+      <optgroup label="水果">
+        <option selected value="列表值">西瓜</option>
+        <option value="菠萝">菠萝</option>
+        <option value="苹果">苹果</option>
+      </optgroup>
+      <optgroup label="蔬菜">
+        <option value="白菜">白菜</option>
+        <option value="冬瓜">冬瓜</option>
+      </optgroup>
+    </select>
+
+    <!-- 滑动列表菜单，其中multiple属性需要根据不同操作系统先按下指定按键才能进行多选，如mac是command -->
+    <select name="list" size="2"  multiple>
+      <option selected value="white">皮肤白</option>
+      <option value="black">皮肤黑</option>
+      <option value="green">皮肤绿</option>
+      <option value="blue">皮肤蓝</option>
+      <option value="red">皮肤红</option>
+    </select>
+
+    <style>
+      .container {
+        display: flex;
+        flex-direction: column;
+      }
+    </style>
+    <form class="container" 
+      id="formId"
+      oninput="sum.value=(+a.value)+(+b.value)"
+    >
+      <input type="text" 
+        name="textInput" 
+        value="这是一个只读输入框"
+        readonly
+        form="formId"
+        autocomplete="off"
+        inputmode="text"
+        size="20" />
+      <input type="text" 
+        placeholder="这是一个禁用输入框"
+        disabled />
+      <input type="text" 
+        name="textInput2" 
+        placeholder="这是一个必填输入框"
+        autofocus
+        required />
+
+      <!-- 
+        属性maxlength和minlength表示输入字符数的最值范围
+      -->
+      <input type="password" name="password" maxlength="20" minlength="8" />
+
+      <!-- 
+        属性dirname定义元素方向名称，在表单提交时其值作为key，`ltr`或`rtl`当中一个作为value
+        
+        属性list指定搜索列表id，一般是datalist元素id
+      -->
+      <input type="search"
+        name="sex" 
+        dirname="searchDirName" 
+        list="sexList"  >
+      <datalist id="sexList">
+        <option>男</option>
+        <option>女</option>
+        <option>未知</option>
+      </datalist>
+
+      <input type="tel" required name="phone" pattern="/\d{3-8}/g" />
+
+      <input type="email" required name="mail" />
+
+      <input type="url" required name="url" />
+
+      <!-- 
+        max和min表示数字型最值范围
+      -->
+      <input type="number" id="a" name="number" max="100" min="1" value="1" />
+
+      <!-- 输入数值范围，提供一种滑动输入方式 -->
+      <input type="range" id="b" name="range" step="10" min="0" max="100" value="10"/>
+      <output name="sum" for="a b"></output>
+
+      <input type="radio" name="radio"  checked />
+
+      <input type="checkbox" name="checkbox" checked />
+
+      <!-- 输入x年x月x日 -->
+      <input type="date" name="date"/>
+
+      <!-- 输入x年x月 -->
+      <input type="month" name="month"/>
+
+      <!-- 输入x年第x周 -->
+      <input type="week" name="week"/>
+
+      <!-- 输入x时x分x秒 -->
+      <input type="time" name="time"/>
+
+      <!-- 输入时分秒，含时区 -->
+      <input type="datetime" name="datetime"/>
+
+      <!-- 输入时分秒，不含时区 -->
+      <input type="local-datetime" name="local-datetime"/>
+
+      <!-- 
+        accept表示接收文件的MIME类型
+        capture表示捕获的媒体设备用途，可取值面向用户的`user`和面向环境的`environment`
+        multiple表示文件是否可以多选
+      -->
+      <input type="file" 
+        accept="image/jpeg,image/png" 
+        capture="environment" 
+        multiple
+        name="file" />
+
+      <input type="button" value="按钮" />
+
+      <input type="submit" 
+        formaction="https://www.baidu.com" 
+        formmethod="post"
+        formenctype="multipart/form-data"
+        formtarget="_top" />
+      <input type="reset" />
+
+      <input type="hidden" name="hidden" value="hiddenValue" />
+
+      <input type="image" 
+        alt="图片加载失败时文字内容" 
+        height="200" 
+        width="200" 
+        src="./loading.gif"
+        name="image" />
+
+      <input type="color" name="color" />
+    </form>
+
+    <figure>
+      <blockquote cite="https://www.baidu.com">不懂就找百度</blockquote>
+      <figcaption>？？？</figcaption>
+    </figure>
+
+    换行了
+    <br />
+    水平线：
+    <hr />
+
+    <!-- 方式一：input标签设置id，label标签设置属性for，值与id相同 -->
+    <input type="radio" name="sex" id="man" />
+    <label for="man">男</label>
+    <!-- 方式二：label标签嵌入input标签 -->
+    <label>
+      <input type="radio" name="sex">女
+    </label>
+
+    <textarea cols="30" rows="10" spellcheck wrap="hard" form="formId" name="textarea"></textarea>
+    
+    <fieldset>
+      <legend>请选择性别：</legend>
+      <input type="radio" name="sex" value="男">男&nbsp
+      <input type="radio" name="sex" value="女" checked>女
+    </fieldset>
+    
+    <embed 
+      src="./loading.gif"
+      type="image/gif"
+      width="64" 
+      height="64" />
+    
+    <iframe
+      allow="geolocation 'self' http://localhost:52330"
+      allowfullscreen
+      width="600"
+      name="subWindow"
+      height="300"
+      sandbox="allow-scripts allow-modals"
+      src="https://www.baidu.com"
+      srcdoc="<p><img src='./loading.gif' /><script>alert();</script></p>"></iframe>
+
+      <style>
+        table {
+          width: 100%;
+          border: 1px solid black;
+          box-sizing: border-box;
+          border-collapse: collapse;
+        }
+
+        th,
+        td {
+          border: 1px solid black;
+        }
+
+        .fs18 {
+          font-size: 18px;
+        }
+
+        .bold {
+          font-weight: bold;
+        }
+
+        .red {
+          color:red;
+        }
+      </style>
+      <table>
+        <!-- 标题 -->
+        <caption>表格标题</caption>
+        <!-- 表格头部 -->
+        <thead>
+          <tr>
+            <th>头部1</th>
+            <th>头部2</th>
+            <th>头部3</th>
+            <th>头部4</th>
+          </tr>
+        </thead>
+        <!-- 表格内容 -->
+        <tbody>
+          <tr>
+            <!-- 列、行合并数 -->
+            <td colspan="2" rowspan="2">1.1</td>
+            <td>1.2</td>
+            <td>1.3</td>
+            <td>1.4</td>
+          </tr>
+          <tr>
+            <td>2.1</td>
+            <td>2.2</td>
+            <td>2.3</td>
+            <td>2.4</td>
+          </tr>
+          <tr>
+            <td>3.1</td>
+            <td>3.2</td>
+            <td>3.3</td>
+            <td>3.4</td>
+          </tr>
+        </tbody>
+        <!-- 表格底部 -->
+        <tfoot>
+          <tr>
+            <td>底部1</td>
+            <td>底部2</td>
+            <td>底部3</td>
+            <td>底部4</td>
+          </tr>
+        </tfoot>
+      </table>
+      <br/>
+      <table id="test-table">
+        <!-- FIXME:colgroup/col标签不起效果，即使删了tbody，难道现在浏览器不支持这种写法了 -->
+        <!-- 列组，可为某一列作一些定制 -->
+        <colgroup>
+          <!-- 列 -->
+          <col span="1" class="fs18"/>
+          <col span="1" class="bold"/>
+          <col span="2" class="red" />
+        </colgroup>
+        <tr>
+          <td>1.1</td>
+          <td>1.2</td>
+          <td>1.3</td>
+          <td>1.4</td>
+        </tr>
+        <tr>
+          <td>2.1</td>
+          <td>2.2</td>
+          <td>2.3</td>
+          <td>2.4</td>
+        </tr>
+        <tr>
+          <td>3.1</td>
+          <td>3.2</td>
+          <td>3.3</td>
+          <td>3.4</td>
+        </tr>
+      </table>
+      <script>
+        window.addEventListener('load',function(){
+          var table = document.querySelector('#test-table');
+          var tbody = document.querySelector('#test-table tbody');
+          table.append(...tbody.children);
+          setTimeout(()=>{
+            table.removeChild(tbody);
+          })
+        })
+      </script>
+
+    <!-- 上标标签 -->
+    <p>
+      <var>a<sup>2</sup></var> + 
+      <var>b<sup>2</sup></var> = 
+      <var>c<sup>2</sup></var>
+    </p>
+
+    <!-- 下标标签 -->
+    <p>CO<sub>2</sub></p>
+  </body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IndexedDB示例</title>
+  </head>
+  <body>
+    <h3>IndexedDB示例</h3>
+  </body>
+  <script>
+    window.addEventListener('load', function() {
+      funcAboutIndexedDB();
+    });
+
+    function funcAboutIndexedDB() {
+
+      // 1.IDBOpenDBRequest :
+      // error
+      // readyState
+      // result: IDBDatabase 
+      // source
+      // transaction
+
+      // onblocked
+      // onerror
+      // onsuccess
+      // onupgradeneeded
+
+
+      // 2.IDBDatabase :
+      // name
+      // objectStoreNames
+      // version
+
+      // onabort
+      // onclose
+      // onerror
+      // onversionchange
+
+      // close()
+      // createObjectStore()
+      // deleteObjectStore()
+      // transaction()
+
+
+      // 3.IDBObjectStore：
+      // indexNames
+      // keyPath
+      // name
+      // transaction
+      // autoIncrement
+
+      // add (value[, key]) 
+      // delete (key) 
+      // put (value[, key]) 
+      // get (key) 
+      // clear () 
+      // count ([key]) 
+      // createIndex  (name,keyPath[, unique]) 
+      // deleteIndex (indexName) 
+      // index (name) 
+      // openCursor ([range][, direction]) 
+
+
+      // 4.IDBTransaction
+      // db
+      // error
+      // mode
+      // objectStoreNames
+
+      // onabort
+      // oncomplete
+      // onerror
+
+      // abort()
+      // objectStore()
+
+      function initDB(db) {
+
+        // 2.建立对象存储和索引
+        let store = db.createObjectStore('student', {
+          keyPath: "id",
+          autoIncrement: true
+        });
+        store.createIndex("classes", "class");
+
+        db.onclose = function() {
+          console.log('db close...')
+        };
+        db.onabort = function() {
+          console.log('db abort...')
+        };
+        db.onerror = function() {
+          console.log('db error...')
+        };
+        db.onversionchange = function() {
+          console.log('db version change...')
+        };
+
+      }
+
+      function operateDB(db) {
+
+        // 3.获取事务对象
+        // mode:readwrite\readonly\versionchange
+        let transaction = db.transaction(['student'], "readwrite");
+        // 4.获取对象存储
+        let store = transaction.objectStore("student");
+        // 5.操作数据
+        store.add({
+          class: 'one',
+          name: 'xiaoming',
+          score: 80,
+          subject: 'math',
+        })
+        store.add({
+          class: 'one',
+          name: 'xiaoming',
+          score: 90,
+          subject: 'chinese',
+        })
+        store.add({
+          class: 'one',
+          name: 'xiaohong',
+          score: 77,
+          subject: 'chinese',
+        })
+
+        transaction.oncomplete = function() {
+          console.log('transaction operation...');
+        };
+        transaction.onerror = function() {
+          console.log('transaction error...')
+        };
+
+      }
+
+      function queryDB(db) {
+
+        let transaction = db.transaction(['student'], "readwrite");
+
+        let store = transaction.objectStore("student");
+
+        let idx = store.index('classes');
+
+        // 查询某一键值的一个对象
+        let req = idx.get('one');
+        req.onsuccess = function(e) {
+          console.log(
+            `I'm ${req.result.name} in class ${req.result.class} and got ${req.result.score} in ${req.result.subject}.`
+          );
+        }
+
+        // 查询某一键值范围的对象
+        console.log('query start...')
+        idx.openCursor().onsuccess = function(e) {
+          var cursor = e.target.result;
+          if (cursor) {
+            console.log(cursor.value);
+            cursor.continue();
+          } else {
+            console.log('query end...')
+          }
+        }
+      }
+
+      // 1.创建或打开数据库
+      let request = window.indexedDB.open('test');
+
+      request.onupgradeneeded = function(e) {
+        console.log('create db success...');
+        initDB(e.target.result);
+        // initDB(request.result);
+      }
+
+      request.onsuccess = function(e) {
+        console.log("access db success...");
+        let db = e.target.result;
+        // let db = request.result;
+        if (db.version !== "1") {
+          operateDB(db);
+          queryDB(db);
+        }
+      }
+
+      request.onerror = function(e) {
+        console.log('create or open db fail...');
+      }
+
+      request.onblocked = function(e) {
+        console.log("block db ...");
+      }
+
+    }
+  </script>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>存储事件</title>
+    <style>
+      #circle {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 10px;
+        border-radius: 50px;
+        background-image: linear-gradient(to right, yellow, red);
+      }
+
+      .circle-anim {
+        animation: anim_rotate 2s infinite ease-in-out;
+      }
+
+      @keyframes anim_rotate {
+        0% {
+          transform: rotateZ(0);
+        }
+
+        100% {
+          transform: rotateZ(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="circle" class="circle-anim"></div>
+    <button id="btn-stop-anim">停止动画</button>
+    <button id="btn-start-anim">继续动画</button>
+  </body>
+  <script>
+    window.addEventListener('load', function() {
+      funcAboutStorageEvent();
+    });
+
+    function funcAboutStorageEvent() {
+
+      let circleEle = document.querySelector('#circle');
+      let stopBtnEle = document.querySelector('#btn-stop-anim');
+      let startBtnEle = document.querySelector('#btn-start-anim');
+
+      stopBtnEle.addEventListener('click', function() {
+        localStorage.setItem('state', 'stop');
+      });
+      startBtnEle.addEventListener('click', function() {
+        localStorage.setItem('state', 'start');
+      });
+
+      window.addEventListener('storage', function(e) {
+        let {
+          // 键名
+          key,
+          // 旧值，默认为null
+          newValue,
+          // 新值
+          oldValue,
+          // 存储对象
+          storageArea,
+          // 当前url
+          url
+        } = e;
+
+        if (key !== 'state') return;
+
+        if (newValue === 'stop') {
+          circleEle.classList.remove('circle-anim');
+        } else if (newValue === 'start') {
+          circleEle.classList.add('circle-anim');
+        }
+      });
+    }
+  </script>
+</html>
