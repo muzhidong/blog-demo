@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport"	content="width=device-width,initial-scale=1.0">
+		<title>窗口二</title>
+	</head>
+	<body>
+		<div id="talk"></div>
+		<input id="content" type="text" />
+		<button id="btn-send">发送</button>
+	</body>
+	<script>
+		function communicateWithWindow() {
+			var talk = document.querySelector('#talk');
+			var content = document.querySelector("#content");
+			var btnSend = document.querySelector("#btn-send");
+			var source;
+
+			function addMsg(msg) {
+				var msgEle = document.createElement('div');
+				msgEle.innerText = msg;
+				talk.appendChild(msgEle);
+			}
+
+			btnSend.addEventListener('click', function() {
+				if (source) {
+					source.postMessage(content.value, "*");
+					addMsg(content.value);
+					content.value = "";
+				} else {
+					alert('找不到谈话对象');
+				}
+			})
+
+			window.addEventListener('message', function(e) {
+				let evt = e || window.event;
+				console.log(evt);
+				// console.log(`origin:`, evt.origin);
+				// console.log(`data:`, evt.data);
+				// console.log(`source:`, evt.source);
+				addMsg(evt.data);
+				source = evt.source;
+			}, false);
+		}
+
+		window.addEventListener('load', function() {
+			communicateWithWindow();
+		})
+	</script>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport"	content="width=device-width, initial-scale=1.0">
+		<title>Worker</title>
+	</head>
+	<body>
+		<h2>Worker</h2>
+		<button id="btn-terminal">终止通信</button>
+		<h2>ServiceWorker</h2>
+		<button id="btn-sync">触发service worker同步事件</button>
+		<button id="btn-notify">触发service worker通知事件</button>
+	</body>
+	<script>
+		function communicateWithWebWorker() {
+			const btnTerminal = document.querySelector('#btn-terminal');
+			// 1、创建WebWorker对象，执行前需判断浏览器是否支持
+			if(Worker === void 0) {
+				btnTerminal.disabled = true;
+				return
+			}
+			
+			var w = new Worker("worker.js");
+			
+			// 2、主线程发送信息
+			w.postMessage('window: Web Worker，你好，我是window');
+			
+			// 3、监听消息接收事件，实现消息互通
+			w.onmessage = function(e) {
+				console.log(e.data);
+			}
+			w.onerror = function(e) {
+				console.error(`error`, e);
+			}
+			w.onmessageerror = function(e) {
+				console.error(`messageerror`, e)
+			}
+
+			btnTerminal.addEventListener('click', function() {
+				// 4、终止WebWorker对象
+				w.terminate();
+				w = null;
+				btnTerminal.disabled = true;
+			}, false)
+		}
+
+		function cacheResourceWithServiceWorker() {
+			// 申请通知权限
+			var notifyPermission;
+			Notification.requestPermission(permission =>{
+				console.log('notification permission:', permission);		
+				notifyPermission = permission
+			})
+
+			function onSuccess(registration) {
+				console.log('service worker register success');
+				console.group('ServiceWorkerRegistration对象提供如下属性或方法');
+				for(let key in registration){
+					console.log(typeof registration[key], key, registration[key]);
+				}
+				console.groupEnd();
+			}
+
+			function onFailure(err) {
+				console.log('service worker register failure', err.message);
+			}
+
+			function onReady(registration) {
+				document.querySelector('#btn-sync').addEventListener('click', function() {
+					// 获取同步管理器，调用注册方法，触发serviceWorker同步事件
+					const syncManager = registration.sync;
+					syncManager.register('I am window').then(async ()=>{
+						const tags = await syncManager.getTags();
+						console.log('register success!', tags)
+					})
+				}, false)
+
+				// FIXME:无响应
+				document.querySelector('#btn-notify').addEventListener('click', function() {
+					if(notifyPermission === 'granted') {
+						navigator.serviceWorker.getRegistration().then(registration => {
+							registration.showNotification("hello, I'm a notification.");
+						})		
+					}	
+				}, false)
+			}
+
+			// 注册service worker
+			navigator.serviceWorker.register('serviceWorker.js').then(onSuccess).catch(onFailure);
+			// service worker就绪
+			navigator.serviceWorker.ready.then(onReady);
+		}
+
+		window.addEventListener('load', function() {
+			communicateWithWebWorker();
+
+			cacheResourceWithServiceWorker();
+		}, false)
+	</script>
+</html>

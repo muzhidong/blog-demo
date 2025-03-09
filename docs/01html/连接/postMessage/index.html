@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport"	content="width=device-width, initial-scale=1.0">
+		<title>窗口一</title>
+	</head>
+	<body>
+		<div id="talk"></div>
+		<input id="content" type="text" />
+		<button id="btn-send">发送</button>
+	</body>
+	<script>
+		function communicateWithWindow() {
+			var openedWindow = window.open('./openedWindow.html');
+
+			var talk = document.querySelector('#talk');
+			var content = document.querySelector("#content");
+			var btnSend = document.querySelector("#btn-send");
+
+			function addMsg(msg) {
+				var msgEle = document.createElement('div');
+				msgEle.innerText = msg;
+				talk.appendChild(msgEle);
+			}
+
+			btnSend.addEventListener('click', function() {
+				openedWindow.postMessage(content.value, "*");
+				addMsg(content.value);
+				content.value = "";
+			})
+
+			window.addEventListener('message', function(e) {
+				var evt = e || window.event;
+				console.log(evt);
+				addMsg(evt.data);
+			}, false);
+		}
+
+		window.addEventListener('load', function() {
+			communicateWithWindow();
+		}, false)
+	</script>
+</html>
