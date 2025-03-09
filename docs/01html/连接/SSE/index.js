@@ -1,32 +1,26 @@
 var http = require('http');
 var fs = require('fs');
 
-var index = './client.html';
-var fileName;
-var timer;
-
 function callback(req, res) {
-  // 获取路径
-  if(req.url === '/') {
-    fileName = index;
-  } else {
-    fileName = `.${req.url}`;
-  }
 
   // 允许跨域
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Headers','Content-Type,Content-Length, Authorization, Accept,X-Requested-With')
   res.setHeader('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS')
-  // res.setHeader('X-Powered-By', ' 3.2.1')
 
+  // 预检请求直接返回200
   if (req.method == 'OPTIONS'){
     res.write(200);
     res.end();
     return;
   }
 
+  // 获取路径
+  var homePage = './index.html';
+  var path = req.url === '/' ? homePage: req.url;
+
   // 处理/test路径请求
-  if(fileName === './test'){
+  if (path === '/test') {
     res.writeHead(200, {
       "Content-Type": "text/event-stream",
       "Cache-Control": "no-cache",
@@ -37,28 +31,28 @@ function callback(req, res) {
     res.write(`data:${new Date()} \n\n`);
     
     // 每隔1秒发送一条信息
-    timer = setInterval(() => {
+    var timer = setInterval(() => {
       res.write(`data:${new Date()} \n\n`);
     }, 1000);
 
-    req.connection.addListener('close',function(){
+    req.connection.addListener('close', function() {
       clearInterval(timer);
       timer = null;
-    },false);
+    }, false);
 
     return;
   }
 
   // 处理/路径请求
-  if(fileName === index){
-    fs.exists(fileName,function(exists) {
-      if(exists) {
-        fs.readFile(fileName, function(err, content) {
+  if(path === homePage){
+    fs.exists(path, function(isExist) {
+      if(isExist) {
+        fs.readFile(path, function(err, content) {
           if(err) {
             res.writeHead(500);
             res.end();
           } else {
-            res.writeHead(200,{
+            res.writeHead(200, {
               "Content-Type": "text/html",
             })
             res.end(content, 'utf-8');
@@ -72,6 +66,7 @@ function callback(req, res) {
     return;
   }
 
+  // 其他路径请求
   res.writeHead(404);
   res.end();
 }

@@ -6,7 +6,7 @@
     content='width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0'>
   <title>客户端</title>
 </head>
-<body>
+<body style="text-align: center;">
   <div>
     <span>服务端主动发来一条信息：</span>
     <span id="msg"></span>
@@ -15,11 +15,13 @@
     <span>当前状态：</span>
     <span id="status"></span>
   </div>
+  <button id="close">关闭连接</button>
 </body>
 <script>
 window.addEventListener('load', function() {
   var msgEl = document.querySelector('#msg');
   var statusEl = document.querySelector('#status');
+  var closeBtn = document.querySelector('#close');
 
   // 通过typeof判断浏览器是否支持该事件
   if(typeof(EventSource) === 'undefined' ){
@@ -29,25 +31,32 @@ window.addEventListener('load', function() {
 
   // 创建EventSource对象，指定自动获取来自服务器的更新的网页URL
   var source = new EventSource("http://127.0.0.1:8080/test");
+
+  function close() {
+    source.close();
+    statusEl.innerText = '连接关闭';
+    closeBtn.disabled = true;
+  }
+
+  closeBtn.addEventListener('click', close, false);
   
   // 监听message事件，服务器发送数据给客户端时触发
   source.addEventListener('message', function(event){
-    console.log('message,', event);
+    console.log('message:', event);
     msgEl.innerText = event.data;
   }, false);
 
   // 监听open事件
   source.addEventListener('open', function(event){
-    console.log('open,', event);
+    console.log('open:', event);
     statusEl.innerText = '连接打开'
   }, false);
 
     // 监听error事件
   source.addEventListener('error',function(event){
-    console.log('onerror,', event);
-    if(e.target.readyState === EventSource.CLOSED){
-      source.close();
-      statusEl.innerText = '连接关闭';
+    console.log('error:', event);
+    if(event.target.readyState === EventSource.CLOSED){
+      close()
     } else{
       statusEl.innerText = '出错了';
     }
