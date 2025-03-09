@@ -9,7 +9,7 @@ function print() {
 }
 print()
 
-self.onmessage = function (e) {
+onmessage = function (e) {
 	console.log(e.data);
 	postMessage('worker: Window 你好，我是Web Worker');
 	postMessage('worker: ByeBye');
