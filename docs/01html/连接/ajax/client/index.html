@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Fetch</title>
+	</head>
+	<body></body>
+	<!-- fetch版本 -->
+	<script src="./fetch-request.js"></script>
+	<!-- xhr版本 -->
+	<!-- <script src="./xhr-request.js"></script> -->
+	<script>
+		window.addEventListener("load", () => {
+			var data = {
+				name: 'benben',
+				age: 10
+			};
+			try {
+				// 内容类型为application/json，会先走预检请求，无论是fetch还是xhr
+				// fetch版本
+				request('get', 'http://127.0.0.1:9008/test', data).then(res => {
+					console.log('get:application/json:', res);
+				});
+
+				request('post', 'http://127.0.0.1:9008/test', data).then(res => {
+					console.log('post:application/json:', res);
+				});
+
+				request('post', 'http://127.0.0.1:9008/test', data, {
+					datatype: 'form',
+					headers: {
+						"Content-Type": "application/x-www-form-urlencoded"
+					},
+				}).then(res => {
+					console.log('post:application/x-www-form-urlencoded:', res);
+				});
+
+				request('post', 'http://127.0.0.1:9008/test', data, {
+					datatype: 'form',
+					headers: {
+						"Content-Type": "multipart/form-data"
+					},
+				}).then(res => {
+					console.log('post:multipart/form-data:', res);
+				});
+			} catch (error) {
+				// xhr版本
+				// 除了content-type为multipart/form-data外，无论是get还是post都收不到响应内容？不在http1.1协议中
+				request.get('http://127.0.0.1:9008/test', data)
+				request.post('http://127.0.0.1:9008/test', data)
+				request.post('http://127.0.0.1:9008/test', data, {
+					"Content-Type": "application/x-www-form-urlencoded"
+				})
+				request.post('http://127.0.0.1:9008/test', data, {
+					"Content-Type": "multipart/form-data"
+				})
+			}
+		})
+	</script>
+</html>
