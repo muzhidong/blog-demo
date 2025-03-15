@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>WebSocket群聊</title>
+    <style>
+      .red {
+        color: red;
+      }
+
+      .green {
+        color: green;
+      }
+
+      .blue {
+        color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="text" placeholder="请输入内容" />
+    <button type="button">发送</button>
+    <div class="receive">收到的数据：</div>
+    <hr/>
+    <footer></footer>
+  </body>
+  <script>
+    const footer = document.querySelector("footer");
+    const btn = document.querySelector("button[type=button]");
+    const input = document.querySelector("input[type=text]");
+    const receive = document.querySelector(".receive");
+
+    const socket = new WebSocket('ws://localhost:8889');
+    btn.addEventListener("click", function () {
+      console.log("data send...");
+      socket.send(input.value);
+      input.value = '';
+    });
+    socket.addEventListener("message", function (res) {
+      console.log("data receive...", res);
+      const jsonObj = JSON.parse(res.data);
+      let className = '';
+      switch (jsonObj.type) {
+        case 0:
+          //进入
+          className = 'green';
+          break;
+        case 1:
+          //离开
+          className = 'red';
+          break;
+        case 2:
+          className = 'blue';
+          // 消息
+          break;
+      }
+      receive.innerHTML += `<div class=${className}>${jsonObj.msg} ${jsonObj.time}</div>`;
+    });
+
+    socket.addEventListener('open', function () {
+      console.log("socket open...");
+      footer.innerHTML = "websocket connect open";
+    });
+    socket.addEventListener("close", function () {
+      console.log("socket close...");
+      footer.innerHTML = "websocket connect close";
+    });
+  </script>
+</html>

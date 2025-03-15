@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>socket.io实现socket通信</title>
+    <style>
+      .red {
+        color: red;
+      }
+      .green {
+        color: green;
+      }
+      .blue {
+        color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="text" placeholder="请输入内容" />
+    <button type="button">发送</button>
+    <div class="receive">收到的数据：</div>
+    <hr/>
+    <footer></footer>
+  </body>
+  <!-- 固定写法 -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const footer = document.querySelector("footer");
+    const btn = document.querySelector("button[type=button]");
+    const input = document.querySelector("input[type=text]");
+    const receive = document.querySelector(".receive");
+
+    // 浏览器用localhost访问，不用127.0.0.1，否则报跨域问题
+    const socket = io('http://localhost:9000');
+    // 接收消息
+    socket.on('send', function(data) {
+      console.log(data);
+      receive.innerHTML += `<div>用户${data.userId}发送了一条消息：${data.data}</div>`
+    });
+    btn.addEventListener("click", function() {
+      // 发送消息
+      socket.emit('receive', {
+        data: input.value,
+      });
+      input.value = '';
+    });
+    // 接收广播
+    socket.on("notice", function(data) {
+      receive.innerHTML += `<div>用户${data.userId}进来了</div>`;
+    });
+    // 接收退出
+    socket.on("exit", function(data) {
+      receive.innerHTML += `<div>用户${data.userId}离开了</div>`;
+    })
+  </script>
+</html>
+
