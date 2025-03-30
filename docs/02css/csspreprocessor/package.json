@@ -1,0 +1,16 @@
+{
+  "name": "css_preprocessor",
+  "version": "1.0.0",
+  "scripts": {
+    "less": "lessc index.less index.less.css",
+    "less_help": "lessc -h",
+    "scss": "sass index.scss index.scss.css --no-source-map",
+    "scss:watch": "sass index.scss index.scss.css --no-source-map --watch",
+    "scss_help": "sass --help"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "less": "^4.1.3",
+    "sass": "^1.56.1"
+  }
+}

@@ -1,0 +1,140 @@
+/* 
+ *  less官网：https://lesscss.org/
+ */
+/*
+ *  1、变量, @声明变量，:赋值变量
+ *  变量可以是单位值、颜色、选择器、样式集合、作为混入参数
+ */
+@import 'common.css';
+.bg-red {
+  background-color: red;
+}
+.less .square {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  background-color: red;
+  border-radius: 50%;
+}
+.less .square::before {
+  position: absolute;
+  content: '';
+  width: 0;
+  height: 0;
+  top: -50%;
+  border: 100px solid transparent;
+  border-bottom-color: gold;
+}
+.less .square::after {
+  position: absolute;
+  content: '';
+  width: 0;
+  height: 0;
+  top: 50%;
+  border: 100px solid transparent;
+  border-top-color: greenyellow;
+}
+/* 
+ * 2、操作符
+ * 不同单位运算不报错，默认px。
+ * 建议使用同一种单位进行运算，以达预期效果
+ */
+.less .box {
+  position: relative;
+  left: 40px;
+  width: 50px;
+  height: 50px;
+  padding: 28px;
+  border: 10px solid #800000;
+  background-color: #666666;
+}
+/* 
+ * 3、混入
+ * 分无输出混入、有输出混入。理解“输出”：生成的样式文件中是否包含该混入写法的样式。
+ */
+.output-mixin {
+  color: brown;
+}
+.less .parent > div:nth-child(3) {
+  color: blueviolet;
+}
+.less .parent-second {
+  color: brown;
+}
+.less .rest {
+  width: 200px;
+  height: 200px;
+  border: 1px dashed blue;
+}
+.more,
+.less .extend,
+.less .extend2 {
+  border: 2px solid orange;
+  border-radius: 50%;
+}
+.less .extend {
+  width: 100px;
+  height: 100px;
+}
+.less .extend2 {
+  width: 100px;
+  height: 100px;
+}
+/*
+ * 4、嵌套
+ */
+.less .container ul {
+  list-style: none;
+}
+.less .container ul li {
+  border-bottom: 1px dashed gold;
+}
+.less .container ul li span {
+  font-weight: bold;
+}
+/*
+ * 5、导入
+ */
+/*
+ * 循环，when
+ */
+.less .loop .item-1 {
+  color: #ff0000;
+  font-size: 13px;
+}
+.less .loop .item-2 {
+  color: #800000;
+  font-size: 14px;
+}
+.less .loop .item-3 {
+  color: #550000;
+  font-size: 15px;
+}
+.less .loop .item-4 {
+  color: #400000;
+  font-size: 16px;
+}
+.less .loop .item-5 {
+  color: #330000;
+  font-size: 17px;
+}
+.less .loop .item-6 {
+  color: #2b0000;
+  font-size: 18px;
+}
+/*
+ *  6、作用域
+ *  7、命名空间与访问器
+ */
+.less .namespace {
+  font-size: 18px;
+}
+/*
+ *  8、函数：不支持自定义
+ *  9、转义
+ *  10、注释
+ *  13、合并+/+_
+ *  14、插件@plugin
+ *  15、流程控制if，以及上面的when
+ *  16、Maps，支持mixin通过[]快速找到映射
+ */

@@ -1,0 +1,182 @@
+/*
+ *  less和sass的实现方式不同。less使用JavaScript实现；sas使用Ruby实现，后改用dart
+ *  sass提供watch选项，实时监听语法错误，在终端和页面都有报错提示，非常友好
+ *  使用dart-sass版，非node-sass、libSass
+ *  sass官网：https://sass-lang.com
+ *  sass与less对比：代码量相近，但less语法糖比较杂，sass语法糖比较规范，自由度更高，可扩展做的比less好
+ */
+
+/*
+ * 4、内置模块，放在文件最前
+ */
+@use "sass:math" as math;
+@use "sass:list" as list;
+@use "sass:color" as color;
+// @use "sass:selector" as selector;
+
+/*
+ *  1、变量, $声明变量，:赋值变量
+ *  变量可以是单位值、颜色，不支持其他
+ */
+$w200: 200px;
+$h200: 200px;
+.bg-red{
+  background-color: red;
+}
+.circle-radius {
+  border-radius: 50%;
+}
+.triangle {
+  &::before{
+    position: absolute;
+    content: '';
+    width: 0;
+    height: 0;
+    top: -50%;
+    border: 100px solid transparent;
+    border-bottom-color: gold;
+  }
+}
+@mixin mixin(){
+  &::after{
+    position: absolute;
+    content: '';
+    width: 0;
+    height: 0;
+    top: 50%;
+    border: 100px solid transparent;
+    border-top-color: greenyellow;
+  }
+}
+.sass .square{
+  position: relative;
+  width: $w200;
+  height: $h200;
+  // 样式类继承
+  @extend .bg-red;
+  @extend .circle-radius;
+  @extend .triangle;
+  // 使用混入
+  @include mixin;
+}
+
+/* 
+ * 7、操作符(==、!=、<、<=、>、>=、+、-、*、%、字符串连接符+、not、and、or)
+ * 不同单位运算报错
+ * 不支持除法运算符，使用 math.div(100px, 2)
+ * 不支持使用颜色作运算，可以考虑使用color.adjust函数
+ */
+.sass .box{
+  position: relative;
+  left: 50px - 10px;
+  width: 10px + 40px;
+  // 注意带括号
+  height: math.div(100px, 2);
+  padding: 30px - 2px;
+  border: (1px * 10) solid #880000;
+  background-color: #666;
+}
+
+/* 
+ *  5、混入
+ *  通过at-rule如@mixin进行定义、@include进行应用。
+ *  相较于less，只有无输出混入
+ */
+@mixin no-output-mixin{
+  color: blueviolet;
+}
+@mixin output-mixin{
+  color: brown;
+}
+.sass .parent{
+  // 11、&代表父选择器，%占位选择器（不会被打包）
+  &>div:nth-child(3){
+    @include no-output-mixin;
+  }
+  &-second{
+    @include output-mixin;
+  }
+}
+
+// 无输出混入支持不定参，相较于less，不能直接使用，需要配合其他特性，功能更强大
+@mixin no-certain-mixin($size, $rest...) {
+  width: $size;
+  height: $size;
+  border: list.nth($rest, 1) list.nth($rest, 2) list.nth($rest, 3);
+}
+.sass .rest{
+  @include no-certain-mixin(200px, 1px, dashed, blue);
+}
+
+// 6、同less，继承与混入的差异：继承的样式不会插入选择器，而是重新定义相同的选择器进行应用；混入的样式直接插入选择器
+.more{
+  border: 2px solid orange;
+  border-radius: 50%;
+}
+.sass .extend{
+  width: 100px;
+  height: 100px;
+  @extend .more;
+}
+.sass .extend2{
+  width: 100px;
+  height: 100px;
+  @extend .more;
+}
+
+/*
+ * 2、同less，嵌套
+ */
+.sass .container{
+  ul{
+    list-style: none;
+    li{
+      border-bottom: 1px dashed gold;
+      span{
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+/*
+ * 13、同less，导入
+ */ 
+@import './common.css';
+
+/*
+ * 15、流程控制
+ * 循环 
+ * 有多个at-rule支持，@each(可以是值列表、键值对列表)、 @for（start、end必须是具体数值。through包含end、to不包含end）、 @while
+ * 另提供@if、@else、@else-if
+ */ 
+@mixin handler($num, $i: 1) {
+  @while $i <= $num {
+    // 10、插值
+    .item-#{$i} {
+      color: color.adjust(#ff0000, $red: math.div(-255, $i) * ($i - 1), $green: 0, $blue: 0);
+      font-size: 12px + $i;
+    }
+    $i: $i + 1;
+  }
+}
+.sass .loop{
+  @include handler(6)
+}
+
+/*
+ *  16、作用域
+ *  sass并无命名空间和访问器的概念
+ */ 
+$fs: 16px;
+.sass .namespace{
+  $fs: 18px;
+  font-size: $fs;
+}
+
+/*
+ *  3、partials，文件以_开头，不会被打包，常用来放置一些工具类，如常用函数、mixin等
+ *  8、注释
+ *  9、函数，内置各类函数（数值、字符串、颜色、Lists、Maps、计算[calc\min\max\clamp]），也可以通过@function自定义
+ *  14、更多At-rules：@at-root（全局样式）、@forward（@use+@extend的结合）、@error、@warn、@debug、CSS原生（如@media、@support、@keyframes）
+ */

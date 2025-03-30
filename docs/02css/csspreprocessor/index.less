@@ -1,0 +1,174 @@
+/* 
+ *  less官网：https://lesscss.org/
+ */
+
+/*
+ *  1、变量, @声明变量，:赋值变量
+ *  变量可以是单位值、颜色、选择器、样式集合、作为混入参数
+ */
+@w200: 200px;
+@h200: 200px;
+@bgRed: .bg-red;
+@{bgRed}{
+  background-color: red;
+}
+@circleRadius:{
+  border-radius: 50%;
+}
+@triangle:{
+  &::before{
+    position: absolute;
+    content: '';
+    width: 0;
+    height: 0;
+    top: -50%;
+    border: 100px solid transparent;
+    border-bottom-color: gold;
+  }
+}
+.mixin(@extraStyle){
+  @extraStyle();
+}
+.less .square{
+  position: relative;
+  width: @w200;
+  height: @h200;
+  .bg-red;
+  @circleRadius();
+  @triangle();
+  .mixin({
+    &::after{
+      position: absolute;
+      content: '';
+      width: 0;
+      height: 0;
+      top: 50%;
+      border: 100px solid transparent;
+      border-top-color: greenyellow;
+    }
+  })
+}
+
+/* 
+ * 2、操作符
+ * 不同单位运算不报错，结果按第一个值的单位进行计算。
+ * 建议使用同一种单位进行运算，以达预期效果
+ */
+.less .box{
+  position: relative;
+  left: 50px - 10%;
+  width: 10px + 40px;
+  // 注意带括号
+  height: (100px / 2);
+  padding: 30px - 2em;
+  border: (1px * 10) solid (red / 2);
+  background-color: #222 * 3;
+}
+
+/* 
+ * 3、混入
+ * 分无输出混入、有输出混入。理解“输出”：生成的样式文件中是否包含该混入写法的样式。
+ */
+.no-output-mixin(){
+  color: blueviolet;
+}
+.output-mixin{
+  color: brown;
+}
+.less .parent{
+  // 11、&代表父选择器
+  & > div:nth-child(3){
+    .no-output-mixin();
+  }
+  &-second{
+    .output-mixin;
+  }
+}
+
+// 无输出混入支持不定参
+.no-certain-mixin(@size; @rest...) {
+  width: @size;
+  height: @size;
+  border: @rest;
+}
+.less .rest{
+  .no-certain-mixin(200px, 1px, dashed,blue);
+}
+
+// 12、继承与混入的差异：继承的样式不会插入选择器，而是重新定义相同的选择器进行应用；混入的样式直接插入选择器
+.more{
+  border: 2px solid orange;
+  border-radius: 50%;
+}
+.less .extend{
+  width: 100px;
+  height: 100px;
+  &:extend(.more);
+}
+.less .extend2:extend(.more){
+  width: 100px;
+  height: 100px;
+}
+
+/*
+ * 4、嵌套
+ */
+.less .container{
+  ul{
+    list-style: none;
+    li{
+      border-bottom: 1px dashed gold;
+      span{
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+/*
+ * 5、导入
+ */ 
+@import './common.css';
+
+/*
+ * 循环，when
+ */ 
+.handler(@num, @i: 1) when (@i =< @num) {  
+  // 插值
+  .item-@{i}{
+    color: (red / @i);
+    font-size: 12px + @i;
+  }
+  .handler(@num, (@i+ 1));  
+}
+.less .loop{
+  .handler(6)
+}
+
+/*
+ *  6、作用域
+ *  7、命名空间与访问器
+ */ 
+@fs: 16px;
+#ns() {
+  .text-18 {
+    @fs: 18px;
+    font-size: @fs;
+  }
+}
+.less .namespace{
+  #ns.text-18();
+}
+
+/*
+ *  8、函数：不支持自定义
+ *  9、转义
+ *  10、注释
+ *  13、合并+/+_
+ *  14、插件@plugin
+ *  15、流程控制if，以及上面的when
+ *  16、Maps，支持mixin通过[]快速找到映射
+ */
+
+
+
