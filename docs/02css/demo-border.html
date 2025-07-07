@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>border</title>
+  <link rel="stylesheet" href="./styles/pseudo-element-arrow.css" />
+  <link rel="stylesheet" href="./styles/border-arrow.css" />
+</head>
+<body>
+  <h4>利用border-style:double实现圆角效果</h4>
+  <style>
+    .box {
+      width: 150px;
+      height: 150px;
+      position: relative;
+      overflow: hidden;
+
+      .one {
+        width: 100%;
+        height: 100%;
+        border: 149px dotted #cd0000; 
+      }
+      .two {
+        position: absolute;
+        top: 75px;
+        left: 0;
+        width: 448px;
+        height: 300px;
+        background: white;
+      }
+      .three {
+        position: absolute;
+        top: 0;
+        left: 75px;
+        width: 300px;
+        height: 448px;
+        background: white;
+      }
+    }
+  </style>
+  <div class="box">
+    <div class="one"></div>
+    <div class="two"></div>
+    <div class="three"></div>
+  </div>
+
+  <h4>右下方background定位技巧</h4>
+  <style>
+    .box2 {
+      width: 200px;
+      height: 200px;
+      border-right: 50px solid transparent;
+      background: url(./images/1.jpeg) no-repeat;
+      background-size: 20px 20px;
+      background-position: 100% 50%;
+    }
+  </style>
+  <div class="box2"></div>
+
+  <h4>增加点击域大小</h4>
+  <style>
+    .box3 {
+      width: 16px;
+      height: 16px;
+      border: 11px solid transparent;
+      background: red;
+      /* 背景裁剪范围 */
+      background-clip: padding-box;
+      cursor: pointer;
+    }
+  </style>
+  <div class="box3"></div>
+
+  <h4>三角等图形绘制</h4>
+  <h5>border画箭头</h5>
+  <div style="display: flex;justify-content: space-around;">
+    <div class="arrow-btn up"></div>
+    <div class="arrow-btn down"></div>
+    <div class="arrow-btn left"></div>
+    <div class="arrow-btn right"></div>
+  </div>
+
+  <h5>border画聊天框</h5>
+  <style>
+    .demo5 {
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+      color: #666;
+      text-decoration: none;
+      text-indent: 28px;
+    }
+
+    /*
+      * 1.背景框是有颜色的
+      */
+    #triangle {
+      position: absolute;
+      left: 50px;
+      top: -10px;
+
+      /*核心代码*/
+      width: 0;
+      height: 0;
+      border-bottom: 10px solid #89b007;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+    }
+
+    #one {
+      position: relative;
+
+      width: 400px;
+      padding: 10px;
+
+      background: #89b007;
+      border-radius: 8px;
+      -moz-border-radius: 8px;
+      -ms-border-radius: 8px;
+      -o-border-radius: 8px;
+      -webkit-border-radius: 8px;
+    }
+
+    #one>p {
+      color: #FFF;
+    }
+
+    /*
+    * 2.背景框是没有颜色的
+    */
+    /*模拟灰色阴影背景层*/
+    #two {
+      position: relative;
+
+      width: 400px;
+
+      background: #999;
+    }
+
+    #content-block {
+      position: relative;
+      left: -4px;
+      top: -4px;
+
+      width: 380px;
+      border: 1px solid #ccc;
+      padding: 10px;
+
+      background: #fff;
+    }
+
+    /*
+    * 核心代码
+    */
+    #border-gray {
+      position: absolute;
+      left: 29px;
+      top: -28px;
+      /*微妙关系*/
+
+      color: #ccc;
+      /*设置边框颜色*/
+      font-size: 40px;
+      /*设置边的大小*/
+
+      z-index: 1;
+      /*设置层级*/
+    }
+
+    #bg-white {
+      position: absolute;
+      left: 29px;
+      top: -27px;
+      /*微妙关系*/
+
+      color: #fff;
+      /*设置背景颜色*/
+      font-size: 40px;
+      /*设置边的大小*/
+
+      z-index: 3;
+      /*设置层级*/
+    }
+
+    /*
+    * 3.背景框是没有颜色的
+    */
+    #three {
+      position: relative;
+
+      width: 250px;
+      border: 1px solid #CCC;
+      padding: 10px;
+
+      box-shadow: 0 0 10px #999;
+      border-radius: 5px;
+    }
+
+    span {
+      position: absolute;
+      left: 50px;
+
+      height: 0;
+      width: 0;
+    }
+
+    /*上部小三角实现样式开始*/
+    span.outer {
+      top: -40px;
+      /*核心代码*/
+      border-color: transparent #ccc #CCC transparent;
+      border-style: dashed dashed solid dashed;
+      border-width: 20px 10px;
+
+    }
+
+    span.inner {
+      top: -39px;
+      /*核心代码*/
+      border-color: transparent #fff #FFF transparent;
+      border-style: dashed dashed solid dashed;
+      border-width: 20px 10px;
+    }
+
+    /*右部小三角实现样式开始*/
+    span.right {
+      left: 270px;
+      top: 30px;
+
+      width: 16px;
+      height: 16px;
+      /*核心代码*/
+      border-color: #CCC #CCC transparent transparent;
+      border-style: solid solid dashed dashed;
+      border-width: 1px;
+
+      /*遮住间隙*/
+      background: #FFF;
+      /*阴影效果*/
+      box-shadow: 5px 0 10px #aaa;
+      /*不取绝对值是因为在放大或者缩小的过程中会产生封不住口的现象*/
+      /*圆角效果*/
+      border-radius: 0 0 100% 0;
+    }
+  </style>
+  <div style="position: relative;"
+    class="demo5">
+    <div id="one">
+      <h6>推荐！！！</h6>
+      <p>利用border实现带背景颜色的三角形！</p>
+      <span id="triangle"></span>
+    </div>
+
+    <div id="two">
+      <div id="content-block">
+        <h6>不推荐！！！</h6>
+        <p>利用层级关系和字体大小颜色实现无背景颜色的三角形！！</p>
+        <span id="bg-white">◆</span>
+        <span id="border-gray">◆</span>
+      </div>
+    </div>
+
+    <div id="three">
+      <h6>推荐！！！</h6>
+      <p>利用border实现无背景颜色的一定形状！！！</p>
+      <span class="outer"></span>
+      <span class="inner"></span>
+      <span class="right"></span>
+    </div>
+  </div>
+
+  <h5>border画三角形</h5>
+  <style>
+    .demo6 {
+      display:flex;
+      div {
+        flex-basis: 50%;
+      }
+    }
+
+    #hollow-square {
+      position: relative;
+    }
+
+    #five {
+      width: 0;
+      border: 40px solid transparent;
+      border-top: 0 none;
+      border-bottom-color: #adc;
+      position: absolute;
+      left: 40px;
+    }
+
+    #six {
+      width: 0;
+      border: 40px solid transparent;
+      border-left: 0 none;
+      border-right-color: #adc;
+      position: absolute;
+      top: 40px;
+    }
+
+    #seven {
+      width: 0;
+      border: 40px solid transparent;
+      border-right: 0 none;
+      border-left-color: #adc;
+      position: absolute;
+      left: 120px;
+      top: 40px;
+    }
+
+    #eight {
+      width: 0;
+      border: 40px solid transparent;
+      border-bottom: 0 none;
+      border-top-color: #adc;
+      position: absolute;
+      left: 40px;
+      top: 120px;
+    }
+
+    #tree .one {
+      width: 0;
+      border: 20px solid transparent;
+      border-top: 0 none;
+      border-bottom-color: #11AADD;
+      margin: 0 auto;
+    }
+
+    #tree .two {
+      width: 0;
+      border: 40px solid transparent;
+      border-top: 0 none;
+      border-bottom-color: #22BBEE;
+      margin: 0 auto;
+    }
+
+    #tree .three {
+      width: 0;
+      border: 60px solid transparent;
+      border-top: 0 none;
+      border-bottom-color: #33CCFF;
+      margin: 0 auto;
+    }
+
+    #four {
+      margin: 0 auto;
+      width: 30px;
+      height: 80px;
+      background: #44DD11;
+    }
+  </style>
+  <div class="demo6">
+    <div id="hollow-square">
+      <div id="five"></div>
+      <div id="six"></div>
+      <div id="seven"></div>
+      <div id="eight"></div>
+    </div>
+    <div id="tree">
+      <div class="one"></div>
+      <div class="two"></div>
+      <div class="three"></div>
+      <div id="four"></div>
+    </div>
+  </div>
+  
+  <h5>border画圆</h5>
+  <!-- 参考文章：http://www.yanhuangxueyuan.com/html5/circle.html -->
+  <style>
+    .demo7 {
+      display: flex;
+      flex-wrap: wrap;
+      box-sizing: border-box;
+      div {
+        text-align: center;
+        margin: auto;
+      }
+    }
+    .circle {
+      width: 100px;
+      height: 100px;
+      color: white;
+      border-radius: 50%;
+      background: black;
+    }
+    .ring {
+      width: 100px;
+      height: 100px;
+      border: 10px solid black;
+      border-radius: 60px; /* 值是短边的一半 + 边框宽度 */
+    }
+    .capsule {
+      width: 200px;  /* 加长 */
+      height: 100px;
+      border: 10px solid black;
+      border-radius: 60px;
+    }
+    .half-circle {
+      width: 200px; /* 宽是高的2倍 */
+      height: 100px;
+      border-top-right-radius: 100px; /* 值是元素宽度一半 */
+      border-top-left-radius: 100px;
+      color: white;
+      background-color: black;
+    }
+    .quarter-circle {
+      width: 100px;
+      height: 100px;
+      border-bottom-left-radius: 100px; /* 值等于边长 */
+      color: white;
+      background-color: black;
+    }
+    .ellipse {
+      width: 160px;
+      height: 100px;
+      border-radius: 50%; /* 长短轴的一半 */
+      color: white;
+      background-color: black;
+    }
+    .sector {
+      width: 0;
+      height: 0;
+      border-width: 50px 100px 100px; /* 调整弧度 */
+      border-style: solid;
+      border-color: transparent transparent #333;
+      border-radius: 50%; 
+    }
+
+  </style>
+  <div class="demo7">
+    <div class="circle">圆</div>
+    <div class="ring">✅圆环</div>
+    <div class="capsule">✅胶囊</div>
+    <div class="half-circle">✅半圆</div>
+    <div class="quarter-circle">✅四分之一圆</div>
+    <div class="ellipse">椭圆</div>
+    <div class="sector">✅任意角度扇形</div>
+  </div>
+  <div>小技巧：会画圆，也就会画圆环（画弧），关键在于后者在前者基础上加border</div>
+
+  <h4><a href="https://demo.cssworld.cn/4/4-4.php">border实现等高布局</a></h4>
+</body>
+</html>

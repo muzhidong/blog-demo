@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>margin</title>
+  <style>
+    html,
+    body,
+    ul {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+  </style>
+</head>
+<body>
+  <h4>负值margin作用在非替换元素上，呈现效果是水平方向上尺寸变长，垂直方向上可上下移动</h4>
+  <div class="father">
+    <div class="son"></div>
+  </div>
+  <style>
+    .father {
+      width: 300px;
+      height: 200px;
+      background: red;
+    }
+    .son {
+      margin: -5px -30px;
+      height: 100px;
+      background: green;
+    }
+  </style>
+  <ul class="list">
+    <li>列表1</li>
+    <li>列表2</li>
+    <li>列表3</li>
+  </ul>
+  <style>
+    .list {
+      min-height: 50px;
+      margin-top: 5px;
+      margin-right: -20px;
+      background: red;
+    }
+    .list > li {
+      float: left;
+      width: 100px;
+      margin-right: 20px;
+      background: green;
+    }
+  </style>
+  <hr/>
+
+  <h4>负值margin作用在替换元素上，呈现是移动效果</h4>
+  <div class="box">
+    <div class="full">
+      <p>文字内容......</p>
+    </div>
+    <img src="./images/1.jpeg" />
+  </div>
+  <style>
+    .box {
+      overflow: hidden; 
+    }
+    .full {
+      float: left;
+      width: 100%;
+    }
+    .full > p {
+      margin-right: 540px;
+    }
+    .box > img {
+      float: left;
+      margin-top: -10px;
+      margin-left: -400px;
+    }
+  </style>
+  <hr/>
+  
+  <h4>margin作用在内联非替换元素，在垂直方向上无效果</h4>
+  <div>top test</div>
+  <span style="margin: 10px -20px -30px 40px;">123</span>
+  <div>bottom test</div>
+  <hr/>
+
+  <h4>margin合并场景之空块级元素的margin合并</h4>
+  <div class="box2">
+    <div>123</div>
+  </div>
+  <style>
+    .box2 {
+      overflow: hidden;
+      background: olive; 
+    }
+    .box2 > div {
+      margin: 25%;
+      background: red;
+    }
+  </style>
+  <hr />
+
+  <h4>margin取auto时的填充规则</h4>
+  <div class="box3">
+    <div>自动填充</div>
+  </div>
+  <div class="box4">
+    <div>右对齐！auto不只是居中，居左居右都可以！</div>
+  </div>
+  <style>
+    .box3 {
+      width: 300px;
+      height: 300px;
+      background: yellow;
+    }
+    .box3 > div {
+      width: 200px;
+      height: 100%;
+      margin-left: auto;
+      margin-right: 80px;
+      color: white;
+      background: black;
+    }
+    .box4 {
+      width: 300px;
+      height: 300px;
+      background: orange;
+    }
+    .box4 > div {
+      width: 200px;
+      height: 100%;
+      margin-left: auto;
+      background: pink;
+    }
+  </style>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>关于display小技巧</title>
+</head>
+<body>
+  <p>效果：实现文字少时居中，文字多时左对齐</p>
+  <style>
+  .box {
+    width: 300px;
+    border: 1px solid greenyellow;
+    text-align:center;
+  }
+  .content {
+    /* 利用inline-block包裹性，浮动和绝对定位亦具有包裹性 */
+    display:inline-block;
+    text-align:left;
+  }
+  </style>
+  <div class="box">
+    <p class="content">居中</p>
+    <p class="content">左对齐左对齐左对齐左对齐左对齐左对齐左对齐左对齐左对齐左对齐左对齐左对齐左对齐</p>
+  </div> 
+
+  <p>效果：CSS写“凹凸”</p>
+  <style>
+  .ao,
+  .tu {
+    display: inline-block;
+    width: 0;
+    margin: 35px;
+    color: #fff;
+    font-size: 14px;
+    line-height: 18px;
+  }
+  .ao:before,
+  .tu:before {
+    outline: 2px solid #cd0000;
+    font-family: Consolas,Monaco,monospace;
+  }
+
+  .ao:before {
+    content: "love你love";
+  }
+
+  .tu {
+    direction: rtl;
+  }
+  .tu:before {
+    content: "我love你";
+  }
+  </style>
+  <span class="ao" style="position: relative;left: -20px;transform: rotate(-90deg);"></span>
+  <span class="tu" style="position: relative;transform: rotate(90deg);"></span>
+
+  <p><del>小技巧：在Chrome和Safari浏览器中，若对父元素设置display:none，则设置background-image属性的子元素不加载资源，若直接对设置background-image属性的元素设置display:none，则资源会加载。（新版都不加载）</del></p>
+  <style>
+  .bg1 {
+    background: url(./images/1.jpeg);
+  }
+  .bg2 {
+    background: url(./images/2.jpeg);
+  }
+  </style>
+  <!-- 会加载 -->
+  <div hidden class="bg1"></div>
+  <div hidden>
+    <!-- 不加载 -->
+    <div class="bg2"></div>
+  </div>
+  <p>注：对img元素设置display:none，图片仍会加载</p>
+  <img hidden style="display: none;" src="./images/1.jpeg" />
+
+  <p>小技巧：可视化编辑页面样式</p>
+  <style style="display:block;" contenteditable>
+    /* 在这里书写样式，即可令页面样式实时生效 */
+    body {
+      background-color: #ccc;
+    }
+  </style>
+</body>
+</html>

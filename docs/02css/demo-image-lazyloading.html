@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>替换元素与非替换元素：优雅实现图片懒加载效果</title>
+  <style>
+    img {
+      display: inline-block;
+      width: 200px;  
+      height: 200px;
+      color: transparent;
+      overflow: hidden;
+      position: relative;
+    }
+    img::before {
+      content: "";
+      position: absolute; 
+      left: 0;
+      width: 100%; 
+      height: 100%;
+      /* 淡蓝色占位背景 */
+      background-color: #f0f3f9;
+    }
+    img::after {
+      /* 黑色alt信息条 */
+      content: attr(alt);
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      line-height: 30px;
+      color: white;
+      font-size: 14px;
+      background-color: rgba(0,0,0,.5);
+      transform: translateY(100%);
+      transition: transform .2s;
+    }
+    img:hover::after {
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <!-- 使用特性：未声明src属性的img是非替换元素，伪元素是有效的，变成替换元素则无效。 -->
+  <!-- 直接声明标签img。不设置占位图，也不带src属性，若带空值的src属性，浏览器会发一次获取当前页的请求 -->
+  <img alt="这是一张图片" />
+  <img src="./images/1.jpeg" alt="这是一张图片" />
+</body>
+</html>

@@ -1,0 +1,33 @@
+/* 箭头 */
+.arrow-btn {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.arrow-btn::after {
+	content: '';
+	display: inline-block;
+	width: .4em;
+	height: .4em;
+	border-width: 2px;
+	border-style: solid;
+	border-color: #999999 #999999 transparent transparent;
+	cursor: pointer;
+}
+
+.arrow-btn.left::after {
+	transform: rotate(-135deg);
+}
+
+.arrow-btn.right::after {
+	transform: rotate(45deg);
+}
+
+.arrow-btn.up::after {
+	transform: translateY(2px) rotate(-45deg);
+}
+
+.arrow-btn.down::after {
+	transform: translateY(-2px) rotate(135deg);
+}
