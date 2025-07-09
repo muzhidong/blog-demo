@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>content-box值：图标</title>
+  <title>图标</title>
   <style>
     .icon-menu { 
       display: inline-block;
@@ -13,11 +13,13 @@
       border-top: 10px solid;
       border-bottom: 10px solid;
       background-color: currentColor;
+      /* 背景裁剪范围 */
       background-clip: content-box;
     }
     .icon-menu2 {
       width: 140px;
       height: 20px;
+      /* 双线边框样式 */
       border-top: 60px double;
       border-bottom: 20px solid;
     }
