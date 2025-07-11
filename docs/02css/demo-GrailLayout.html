@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible"	content="IE=edge">
+		<meta name="viewport"	content="width=device-width, initial-scale=1.0">
+		<title>圣杯布局（左右固定，中间自适应）</title>
+		<style>
+			.clear {
+				clear: both;
+			}
+
+			.blue {
+				background-color: blue;
+			}
+
+			.red {
+				background-color: red;
+			}
+
+			.yellow {
+				background-color: yellow;
+			}
+
+			/* float */
+			.left {
+				float: left;
+				width: 100px;
+			}
+
+			.right {
+				float: right;
+				width: 100px;
+			}
+
+			.middle {
+				margin: 0 100px;
+			}
+
+			/* position */
+			.container2 {
+				padding: 0 100px;
+				position: relative;
+			}
+
+			.middle2 {
+				width: 100%;
+			}
+
+			.left2 {
+				position: absolute;
+				left: 0;
+				top: 0;
+				width: 100px;
+			}
+
+			.right2 {
+				position: absolute;
+				right: 0;
+				top: 0;
+				width: 100px;
+			}
+
+			/* 浮动 + margin负值 + 相对定位 */
+			.container3 {
+				padding: 0 100px;
+			}
+
+			.container3>div {
+				float: left;
+			}
+
+			.middle3 {
+				width: 100%;
+			}
+
+			.left3 {
+				position: relative;
+				left: -100px;
+				width: 100px;
+				margin-left: -100%;
+			}
+
+			.right3 {
+				position: relative;
+				right: -100px;
+				width: 100px;
+				margin-left: -100px;
+			}
+
+			/* flex */
+			.flex {
+				display: flex;
+				width: 100%;
+				height: 100px;
+			}
+
+			.flex-left,
+			.flex-right {
+				flex: 0 0 100px;
+			}
+
+			.flex-middle {
+				flex: 1 1 auto;
+			}
+
+			/* grid */
+			.grid {
+				display: grid;
+				grid-template-columns: 100px auto 100px;
+				grid-template-rows: 100px;
+			}
+
+			.gird-left {
+				grid-column: 1 / 2;
+			}
+
+			.gird-middle {
+				grid-column: 2/ 3;
+			}
+
+			.gird-right {
+				grid-column: 3 / 4;
+			}
+		</style>
+	</head>
+	<body>
+		<h2>浮动实现</h2>
+		<div class="container">
+			<div class="left blue">左边盒子左浮动</div>
+			<div class="right yellow">右边盒子右浮动</div>
+			<!-- 如果放在中间，会把右侧顶下 -->
+			<div class="middle red">中间盒子设置 margin-left 和 margin-right ，为左右盒子留位置</div>
+		</div>
+
+		<h2>绝对定位实现</h2>
+		<div class="container2">
+			<div class="middle2 red">中间盒子的宽度设置为100%
+				<hr>
+				<div>父盒子设置左右 padding 为左右盒子留位置</div>
+				<div>左、右盒子使用绝对定位，占据 padding 空白</div>
+			</div>
+			<div class="left2 blue">左边盒子</div>
+			<div class="right2 yellow">右边盒子</div>
+		</div>
+
+		<h2>浮动 + margin负值 + 相对定位实现（不推荐）</h2>
+		<div class="container3">
+			<div class="middle3 red">中间盒子的宽度设置为100%，且左浮动</div>
+			<div class="left3 blue">左边栏设置相对定位 + 负外边界，且左浮动</div>
+			<div class="right3 yellow">右边栏设置相对定位 + 负外边界，且左浮动</div>
+		</div>
+
+		<div class="clear">以上方案都存在一个问题：三列高度不一。另使用浮动的，界面缩小到一定程度，布局会错乱</div>
+
+		<h2>flex</h2>
+		<div class="flex">
+			<div class="blue flex-left"></div>
+			<div class="red flex-middle"></div>
+			<div class="yellow flex-right"></div>
+		</div>
+
+		<h2>grid</h2>
+		<div class="grid">
+			<div class="blue grid-left"></div>
+			<div class="red grid-middle"></div>
+			<div class="yellow grid-right"></div>
+		</div>
+	</body>
+</html>

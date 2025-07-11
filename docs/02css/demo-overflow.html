@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>overflow与滚动条、锚点定位</title>
+  <style>
+    /* 在最新谷歌浏览器，发现滚动条不占宽度，且样式有改观，该问题基本上不会出现 */
+    /* *滚动条占据宽度可能使对水平居中布局的页面在加载时产生晃动，下面是不让晃动的小技巧 */
+    /* start */
+    /* :root {
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    :root body {
+      position: absolute;
+    }
+    body {
+      width: 100vw;
+      overflow: hidden;
+    } */
+    /* end */
+
+    html,
+    body {
+      padding: 0;
+      margin: 0;
+      background: orange;
+    }
+
+    .container {
+      display: block;
+      width: 300px;
+      margin: 0 auto;
+      color: white;
+      font-size: 12px;
+      background: #ccc;
+    }
+
+    h3 {
+      margin: 0;
+      padding: 1.17em 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h3>获取窗体滚动高度</h3>
+    <div>
+      <span>document.documentElement.scrollHeight：</span>
+      <span id="value"></span>
+    </div>
+    <div>
+      <span>document.body.scrollHeight：</span>
+      <span id="value2"></span>
+    </div>
+
+    <h3>除html标签外，默认自动产生滚动条的标签</h3>
+    <textarea id="ta"
+      name="ta" 
+      style="width:calc(100% - 6px);height: 400px;"
+      placeholder="这是一个文本区域框"></textarea>
+    
+    <div style="height: 3000px;"></div>
+
+    <h3>URL地址锚点定位</h3>
+    <a href="#" >回到顶部</a>
+    <a href="#ta">回到文本区域框</a>
+
+    <h3>focus锚点定位</h3>
+    <a href="https://demo.cssworld.cn/6/4-3.php" >focus锚点定位实现选项卡切换，替换URL锚点定位，避免URL锚点定位触发所有可滚动窗体的定位行为</a>
+  </div>
+  <script>
+    window.addEventListener('load', function () {
+      const spanEl = document.querySelector('#value')
+      const spanEl2 = document.querySelector('#value2')
+      // 获取窗体滚动高度，注意document.documentElement取的是html，document.body取的是body这一点即可
+      spanEl.textContent = document.documentElement?.scrollHeight
+      spanEl2.textContent = document.body?.scrollHeight
+    })
+  </script>
+</body>
+</html>

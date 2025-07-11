@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport"	content="width=device-width, initial-scale=1.0">
+		<title>居中布局（分水平居中、垂直居中、水平垂直居中）</title>
+		<style>
+			body > div {
+				height: 100px;
+				background-color: rgb(0, 128, 0, .7);
+			}
+			body > div > div {
+				background: orange;
+			}
+		</style>
+	</head>
+	<body>
+		<h2>水平居中</h2>
+		
+		<div style="text-align:center;">文字对齐：text-align:center;</div>
+		<br/>
+
+		<div style="display:block;width:50%;margin:0 auto;">元素宽度必须是明确：display:block;width:50%;margin:0 auto;</div>
+		<br/>
+
+		<div style="display:table;margin:0 auto;">元素宽度可以不明确：display:table;margin:0 auto;</div>
+		<br/>
+
+		<div style="display:flex;justify-content:center;">flex布局：display:flex;justify-content:center;</div>
+		<br/>
+
+		<div style="position:relative;">
+			<div
+				style="position:absolute;left:50%;transform:translateX(-50%);">自适应内容的绝对布局：position:absolute;left:50%;transform:translateX(-50%);</div>
+		</div>
+		<br/>
+
+		<div style="position:relative;">
+			<div style="position:absolute;left:0;right:0;width:50%;margin:0 auto;">具有流体特性的绝对布局，适合宽度明确：position:absolute;left:0;right:0;width:50%;margin:0 auto;</div>
+		</div>
+		<br/>
+
+		<h2>垂直居中</h2>
+		
+		<div style="line-height:100px;white-space:nowrap;overflow:auto hidden;">行高表示行间基线距离，大小等于文本顶线到文本底线的距离+1倍行距：line-height:100px;height:100px;</div>
+		<br/>
+
+		<div style="display:table-cell;vertical-align:middle;">
+			默认只对拥有vertical-align特性的元素起作用如td、th，若要使元素具备该特性，添加display:table-cell：display:table-cell;vertical-align:middle;</div>
+		<br/>
+
+		<div style="display:flex;align-items:center;">flex布局：display:flex;align-items:center;</div>
+		<br/>
+
+		<div style="position:relative;">
+			<div style="position:absolute;top:50%;transform:translateY(-50%);">自适应内容的绝对布局：position:absolute;top:50%;transform:translateY(-50%);</div>
+		</div>
+		<br/>
+
+		<div style="position:relative;">
+			<div style="position:absolute;top:0;bottom:0;height:50%;margin:auto 0;">具有流体特性的绝对布局，适合高度明确：position:absolute;top:0;bottom:0;height:50%;margin:auto 0;</div>
+		</div>
+		<br/>
+
+		<h2>水平垂直居中</h2>
+
+		<div style="display:flex;">
+			<div style="width:50%;height:50%;margin:auto;">父元素display:flex + 子元素margin:auto;</div>
+		</div>
+		<br/>
+
+		<div style="display:flex;justify-content:center;align-items:center;">
+			flex布局：display:flex;justify-content:center;align-items:center;
+		</div>
+		<br/>
+
+		<div style="position:relative;">
+			<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">自适应内容的绝对布局：position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+			</div>
+		</div>
+		<br/>
+
+		<div style="position:relative;">
+			<div style="position:absolute;margin:auto;top:0;right:0;bottom:0;left:0;width:50%;height:50%;">具有流体特性的绝对布局，适合宽高明确：position:absolute;margin:auto;top:0;right:0;bottom:0;left:0;width:50%;height:50%;</div>
+		</div>
+		<br/>
+	</body>
+</html>
