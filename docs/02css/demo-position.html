@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>position:fixed的absolute模拟</title>
+  <style>
+  /* 原理：关键在于普通元素代替页面的滚动条，能被定位元素限制和精准定位，如弹窗时背景锁定，即控制滚动固定 */
+  html,
+  body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+  }
+  .page {
+    position: absolute;
+    left: 0;
+    box-sizing: border-box;
+  }
+  .scroll-bar {
+    position: absolute;
+    right: 0;
+    width: 17px;
+    height: 100%;
+    background-color: #ccc;
+    overflow: auto;
+  }
+  .scroll-bar .thumb {
+    --h: 0;
+    --t: 0;
+    content: '';
+    position: relative;
+    top: var(--t);
+    width: 100%;
+    height: var(--h);
+    background: black;
+    /* transition: --t .05s; */
+  }
+  .h1000 {
+    height: 1000px;
+    border: 5px solid #999;
+  }
+  </style>
+</head>
+<body>
+  <div class="page h1000">
+    <!-- 页面内容 -->
+  </div>
+  <div class="scroll-bar">
+    <div class="thumb"></div>
+  </div>
+  <script>
+    window.addEventListener('load', function () {
+      const pageEl = document.querySelector('.page');
+      const scrollBarEl = document.querySelector('.scroll-bar');
+      const thumbEl = document.querySelector('.scroll-bar .thumb');
+      
+      // 1、检测页面是否可滚动，进行初始化并监听相关事件
+      // 页面内容可滚动距离
+      let contentScrollDist;
+      // 页面内容可滚动距离与滚动条可滚动距离之比
+      let ratio;
+      // 实际thumb高度
+      let barHeight;
+      // 滚动条thumb最小高度20px
+      const minBarHeight = 20;
+      // 高度变化回调函数
+      const onHeightChange = () => {
+        contentScrollDist = pageEl.offsetHeight - window.innerHeight
+        if (contentScrollDist > 0) {
+          barHeight = Math.max(minBarHeight, window.innerHeight - contentScrollDist);
+          thumbEl.style.setProperty('--h', `${barHeight}px`);
+
+          pageEl.style.right = '17px'
+          scrollBarEl.style.display = 'block'
+          
+          ratio = contentScrollDist / (window.innerHeight - barHeight);
+        } else {
+          pageEl.style.right = '0'
+          scrollBarEl.style.display = 'none'
+        }
+      }
+      // 初始化
+      onHeightChange()
+      // 监听来自窗口大小变化的高度变化
+      window.addEventListener('resize', onHeightChange)
+      // 监听来自内容变化的高度变化
+      const observer = new MutationObserver((mutationsList) => {
+        onHeightChange()
+      })
+      observer.observe(pageEl, {
+        childList: true,
+        attributes: true,
+        characterData: true,
+      })
+
+      // 2、监听滚轮事件
+      document.addEventListener('wheel', function (e) {
+        if (contentScrollDist > 0) {
+          // 上滑（往下翻），deltaY为正值，top越来越小；下滑（往上翻），deltaY为负值，top越来越大
+          // top始终不大于0，deltaY值表示滑动速度 
+          const deltaY = e.deltaY
+          const speed = 5
+          let contentScrollOffset
+          if (deltaY > 0) {
+            contentScrollOffset = Math.max(pageEl.offsetTop - speed * deltaY, -contentScrollDist)
+            pageEl.style.top = `${contentScrollOffset}px`
+          } else {
+            contentScrollOffset = Math.min(pageEl.offsetTop - speed * deltaY, 0)
+            pageEl.style.top = `${contentScrollOffset}px`
+          }
+          // 滚动条滚动，内容滚动偏移量与滚动条滚动偏移量建立映射关系
+          thumbEl.style.setProperty('--t', -contentScrollOffset / ratio + 'px')
+        }
+      })
+
+      // 3、模拟滚动条拖动
+      let flag = false
+      let lastY = 0
+      let offsetY
+      thumbEl.addEventListener('mousedown', function (e) {
+        flag = true
+        // 按下时的点与滚动条顶部的距离 
+        offsetY = e.offsetY
+      })
+      document.addEventListener('mousemove', function (e) {
+        if(!flag) return
+        // 获取鼠标的在y轴方向的移动偏移量和方向：
+        // 上拖动，deltaY为负值，top越来越小；下拖动，deltaY为正值，top越来越大
+        // top始终不小于0，deltaY值表示滑动速度
+        const deltaY = e.pageY - lastY
+        let thumbScrollOffset
+        if (deltaY > 0) {
+          thumbScrollOffset = Math.min(e.pageY - offsetY, window.innerHeight - barHeight)
+          thumbEl.style.setProperty('--t', `${thumbScrollOffset}px`);
+        } else {
+          thumbScrollOffset = Math.min(Math.max(e.pageY - offsetY, 0), window.innerHeight - barHeight)
+          thumbEl.style.setProperty('--t', `${thumbScrollOffset}px`);
+        }
+        // 内容滚动，内容滚动偏移量与滚动条滚动偏移量建立映射关系
+        pageEl.style.top = `${-thumbScrollOffset * ratio}px`
+        lastY = e.pageY
+      })
+      document.addEventListener('mouseup', function (e) {
+        flag = false
+      })
+    })
+  </script>
+</body>
+</html>

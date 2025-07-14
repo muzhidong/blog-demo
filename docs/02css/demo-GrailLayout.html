@@ -6,7 +6,11 @@
 		<meta name="viewport"	content="width=device-width, initial-scale=1.0">
 		<title>圣杯布局（左右固定，中间自适应）</title>
 		<style>
-			.clear {
+			.clear::before,
+			.clear::after {
+				content: '';
+				display: block;
+				height: 0;
 				clear: both;
 			}
 
@@ -133,7 +137,7 @@
 			<div class="middle red">中间盒子设置 margin-left 和 margin-right ，为左右盒子留位置</div>
 		</div>
 
-		<h2>绝对定位实现</h2>
+		<h2 class="clear">绝对定位实现</h2>
 		<div class="container2">
 			<div class="middle2 red">中间盒子的宽度设置为100%
 				<hr>
