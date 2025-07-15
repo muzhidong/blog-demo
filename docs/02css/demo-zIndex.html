@@ -4,182 +4,143 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>层叠规则</title>
-  <style>
-    .box{
-      width: 200px;
-      height: 200px;
-      padding: 20px;
-      position: absolute;
-      color: white;
-    }
-    .one{
-      background-color: #f00;
-      outline: 5px solid #000;
-      top: 100px;
-      left: 200px;
-      z-index: 10;
-    }
-    .two{
-      background-color: #0f0;
-      outline: 5px solid #000;
-      top: 50px;
-      left: 70px;
-      z-index: 100;
-    }
-    .three{
-      background-color: #0ff;
-      outline: 5px solid #000;
-      top: 125px;
-      left: 25px;
-      z-index: 150;
-    }
-    .four{
-      background-color: #00f;
-      outline: 5px solid #ff0;
-      top: 200px;
-      left: 350px;
-      z-index: 50;
-    }
-
-    .container{
-      position: absolute;
-      top: 600px;
-      left: 0;
-    }
-
-    .square{
-      width: 200px;
-      height: 50px;
-      color: white;
-    }
-
-    .background-border{
-      background-color: purple;
-    }
-
-    .neg-zindex{
-      position: absolute;
-      top: 25px;
-      left: 50px;
-      background-color: darkgreen;
-    }
-
-    .block{
-      position: absolute;
-      top: 50px;
-      left:100px;
-      background-color: darkslateblue;
-    }
-
-    .floated{
-      position: absolute;
-      top: 75px;
-      left: 150px;
-      background-color: orange;
-    }
-
-    .inline{
-      position: absolute;
-      top: 100px;
-      left: 200px;
-      background-color: orangered;
-    }
-
-    .zero-zindex{
-      position: absolute;
-      top: 125px;
-      left: 250px;
-      background-color: chocolate;
-    }
-
-    .pos-zindex{
-      position: absolute;
-      top: 150px;
-      left: 300px;
-      background-color: dodgerblue;
-    }
-
-    .test{
-      position: absolute;
-      top: 800px;
-    }
-    .t-neg-zindex{
-      background-color: blue;
-      border: 5px solid black;
-      z-index: -1;
-
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-    .t-block{
-      background-color: pink;
-      border: 5px solid black;
-    }
-    .t-floated{
-      float: left;
-      background-color: gold;
-      border: 5px solid black;
-      
-      position: relative;
-      top: -30px;
-    }
-    .t-inline{
-      display: inline-block;
-      background-color: rebeccapurple;
-      border: 5px solid black;
-      
-      position: relative;
-      left: -210px;
-      top: 0;
-    }
-    .t-zero-zindex{
-      background-color: red;
-      border: 5px solid black;
-      z-index: 0;
-
-      position: absolute;
-      left: 100px;
-      top: 100px;
-    }
-    .t-pos-zindex{
-      background-color: green;
-      border: 5px solid black;
-      z-index: 1;
-
-      position: absolute;
-      left: 150px;
-      top: 75px;
-    }
-  </style>
+  <title>层叠顺序规则</title>
 </head>
 <body>
-    <div class="box one">10
-      <div class="box two">100</div>
-      <div class="box three">150</div>
-    </div>
-    <div class="box four">50</div>
+    <h4>层叠顺序规则（按装饰、布局、内容作用由下而上分层）</h4>
+    <style>
+      .container {
+        position: absolute;
+        top: 50px;
+        left: 20px;
+      }
 
-    <h4 style="position: absolute;top: 550px;left: 0;">层级关系</h4>
+      .square {
+        width: 400px;
+        height: 50px;
+        color: white;
+        white-space: nowrap;
+      }
+
+      .background-border {
+        background-color: purple;
+      }
+
+      .neg-z-index {
+        position: absolute;
+        top: 25px;
+        left: 50px;
+        background-color: darkgreen;
+      }
+
+      .block {
+        position: absolute;
+        top: 50px;
+        left:100px;
+        background-color: darkslateblue;
+      }
+
+      .float {
+        position: absolute;
+        top: 75px;
+        left: 150px;
+        background-color: orange;
+      }
+
+      .inline {
+        position: absolute;
+        top: 100px;
+        left: 200px;
+        background-color: orangered;
+      }
+
+      .zero-z-index {
+        position: absolute;
+        top: 125px;
+        left: 250px;
+        background-color: chocolate;
+      }
+
+      .pos-z-index {
+        position: absolute;
+        top: 150px;
+        left: 300px;
+        background-color: dodgerblue;
+      }
+    </style>
     <div class="container">
-      <div class="square background-border">Background/Borders</div>
-      <div class="square neg-zindex">Negative Z-Index</div>
-      <div class="square block">Block Level Boxes</div>
-      <div class="square floated">Floated Boxes</div>
-      <div class="square inline">Inline Boxes</div>
-      <div class="square zero-zindex">Z-Index=0</div>
-      <div class="square pos-zindex">Positive Z-Index</div>
+      <div class="square background-border">层叠上下文：背景background/边框border</div>
+      <div class="square neg-z-index">负z-index</div>
+      <div class="square block">block块状水平盒子</div>
+      <div class="square float">float浮动盒子</div>
+      <div class="square inline">inline水平盒子，如inline、inline-block、inline-table</div>
+      <div class="square zero-z-index">z-index:auto或z-index:0</div>
+      <div class="square pos-z-index">正z-index</div>
     </div>
 
-    <h4 style="position: absolute;top: 750px;left: 0;">示例</h4>
-    <div class="test">
-      <div class="square t-neg-zindex">Negative Z-Index</div>
-      <div class="square t-block">Block Level Boxes</div>
-      <div class="square t-floated">Floated Boxes</div>
-      <div class="square t-inline">Inline Boxes</div>
-      <div class="square t-zero-zindex">Z-Index=0</div>
-      <div class="square t-pos-zindex">Positive Z-Index</div>
+    <h4 style="position:absolute;top:300px;">z-index特性：若父元素设置了z-index，则以父元素的z-index值为准，值大的父元素的层级较高</h4>
+    <style>
+      .box {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        padding: 20px;
+        color: white;
+      }
+      .one {
+        background-color: #f00;
+        outline: 5px solid #000;
+        top: 100px;
+        left: 200px;
+        z-index: 10;
+      }
+      .two {
+        background-color: #0f0;
+        outline: 5px solid #000;
+        top: 50px;
+        left: 70px;
+        z-index: 100;
+      }
+      .three {
+        background-color: #0ff;
+        outline: 5px solid #000;
+        top: 125px;
+        left: 25px;
+        z-index: 150;
+      }
+      .four {
+        background-color: #00f;
+        outline: 5px solid #ff0;
+        top: 200px;
+        left: 350px;
+        z-index: 50;
+      }
+    </style>
+    <div style="position:absolute;top:300px;">
+      <div class="box one">10
+        <div class="box two">100</div>
+        <div class="box three">150</div>
+      </div>
+      <div class="box four">50</div>
+    </div>
+
+    <h4 style="position:absolute;top:800px;">示例：使父元素变成层叠上下文元素，解决父元素背景覆盖子元素图片问题</h4>
+    <style>
+      .demo { 
+        position: absolute;
+        top: 850px;
+        background: red;
+        /* 变成层叠上下文元素 */
+        transform: scale(1);
+      }
+      .demo img {
+        position: relative;
+        right: -100px;
+        z-index: -1; 
+      }
+    </style>
+    <div class="demo">
+      <img src="./images/1.jpeg" />
     </div>
 </body>
 </html>
