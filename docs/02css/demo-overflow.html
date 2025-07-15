@@ -6,9 +6,7 @@
   <title>overflow与滚动条、锚点定位</title>
   <style>
     /* 滚动条占据宽度可能使对水平居中布局的页面在加载时产生晃动，下面是不让晃动的小技巧 */
-    /* 发现：在最新谷歌浏览器，发现滚动条不占宽度，且样式有改观，该问题基本上不会出现 */
-    /* start */
-    /* :root {
+    :root {
       overflow-x: hidden;
       overflow-y: auto;
     }
@@ -18,8 +16,7 @@
     body {
       width: 100vw;
       overflow: hidden;
-    } */
-    /* end */
+    }
 
     html,
     body {
