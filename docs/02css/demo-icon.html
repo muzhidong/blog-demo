@@ -5,6 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>图标</title>
   <style>
+    /* 图标总是保持垂直居中，不受外部字体大小影响 */
+    .icon {
+      display: inline-block; 
+      width: 20px; 
+      /* 要点1：高度和行高保持20px，20px不是固定的 */
+      height: 20px; 
+      line-height: 20px;
+      /* 要点2：图标CSS不使用overflow:hidden保证基线为里面字符的基线，但是要让里面潜在的字符不可见 */
+      white-space: nowrap; 
+      letter-spacing: -1em; 
+      text-indent: -999em;
+    }
+    /* 要点3：图标标签里永远有字符 */
+    .icon:before {
+      content:'\3000';
+    }
+    .icon-test {
+      background: url('./images/1.jpeg') 100% no-repeat;
+    }
+
     .icon-menu { 
       display: inline-block;
       width: 140px;
@@ -42,5 +62,8 @@
   <hr />
   <div class="icon-dot"></div>
   <hr />
+  <div style="font-size:12px;"><i class="icon icon-test">这是一个测试图标，别担心，不会展示</i>测试</div>
+  <div><i class="icon icon-test">x</i>测试</div>
+  <div style="font-size:30px;"><i class="icon icon-test">x</i>测试</div>
 </body>
 </html>
