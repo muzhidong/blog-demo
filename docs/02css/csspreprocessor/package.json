@@ -6,7 +6,9 @@
     "less_help": "lessc -h",
     "scss": "sass index.scss index.scss.css --no-source-map",
     "scss:watch": "sass index.scss index.scss.css --no-source-map --watch",
-    "scss_help": "sass --help"
+    "scss_help": "sass --help",
+    "less2css": "lessc",
+    "sass2css": "sass"
   },
   "license": "MIT",
   "dependencies": {
