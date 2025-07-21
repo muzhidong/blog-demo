@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>white-space</title>
+  <style>
+    pre,
+    span {
+      display: inline-block;
+      width: 50px;
+      background-color: green;
+    }
+    .normal {
+      white-space: normal;
+    }
+    .nowrap {
+      white-space: nowrap;
+    }
+    .pre {
+      white-space: pre;
+    }
+    .pre-wrap {
+      white-space: pre-wrap;
+    }
+    .pre-line {
+      white-space: pre-line;
+    }
+  </style>
+</head>
+<body>
+  <h1>pre标签(保留所有空格符和换行符)</h1>
+  <pre>  hellohello  world worldworld
+
+    worldworldworld   
+
+  </pre>
+
+  <h1>white-space:normal(去前后空格和换行，中间相连的空格符、换行符合并为换行符)</h1>
+  <span class="normal">  hellohello  world worldworld
+
+    worldworldworld   
+
+  </span>
+
+  <h1>white-space:nowrap(去前后空格和换行，中间相连的空格符、换行符合并为空格符，不换行)</h1>
+  <span class="nowrap">  hellohello  world worldworld
+
+    worldworldworld   
+
+  </span>
+
+  <h1>white-space:pre(同pre标签，但字体不同)</h1>
+  <span class="pre">  hellohello  world worldworld
+
+    worldworldworld   
+
+  </span>
+
+  <h1>white-space:pre-wrap(前后空格变换行，中间相连的空格符变换行符，换行符保留)</h1>
+  <span class="pre-wrap">  hellohello  world worldworld
+
+    worldworldworld   
+
+  </span>
+
+  <h1>white-space:pre-line(同normal，但换行符保留，不与空格符合并)</h1>
+  <span class="pre-line">  hellohello  world worldworld
+
+    worldworldworld   
+
+  </span>
+</body>
+</html>
