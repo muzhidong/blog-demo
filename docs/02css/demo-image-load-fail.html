@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>图片加载异常展示</title>
+  <style>
+    img {
+      display: inline-block;
+      /* 保证伪元素宽高与图片大小保持一致 */
+      transform: scale(1);
+    }
+    img::after {
+      content: attr(alt);
+      position: absolute;
+      left: 0; 
+      bottom: 0;
+      width: 100%;
+      line-height: 2;
+      text-align: center;
+      color: white;
+      font-size: 12px;
+      background-color: rgba(0,0,0,.5);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .demo img {
+      width: 128px; 
+      height: 96px;
+      object-fit: cover;
+      /* 保证异常图片与正常图片底部对齐 */
+      vertical-align: bottom;
+    }
+    /* 关键实现：图片加载正常时，伪元素是不生效的 */
+    .demo img::before {
+      content: '';
+      position: absolute;
+      left: 0; 
+      top: 0;
+      width: 100%; 
+      height: 100%;
+      background: #f5f5f5 url(https://www.zhangxinxu.com/study/202010/break.svg) no-repeat center / 50% 50%;
+      color: transparent;
+    }
+
+    img.avatar {
+      --s: var(--size, 5rem);
+      display: inline-block;
+      width: var(--s);
+      height: var(--s);
+      border-radius: 50%;
+      white-space: normal;
+      overflow: hidden;
+    }
+    img.avatar::before {
+      content: attr(alt);
+      /* 保证背景色填充整个背景，不局限于文字 */
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      /* 行高设置为头像高，隐藏第二行开始的文字 */
+      line-height: var(--s);
+      /* 文字间距，隐藏第一行非首个文字的文字 */
+      letter-spacing: var(--s);
+      /* 文本缩进，将首个文字偏移回来 */
+      text-indent: var(--s);
+      color: inherit;
+      /* 下面两个属性用处没效果??? */
+      text-align: center;
+      line-break: anywhere;
+      font-size: calc(var(--s) / 2);
+      background-color: bisque;
+    }
+    </style>
+</head>
+<body>
+  <div class="demo">
+    <img alt="图片加载异常展示处理">
+  </div>
+  <img class="avatar" alt="匿名头像"/>
+</body>
+</html>
