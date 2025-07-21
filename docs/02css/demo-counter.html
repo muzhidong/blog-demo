@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CSS计数器</title>
+  <style type="text/css">
+    * {
+      box-sizing: border-box;
+    }
+
+    ul {
+      width:100%;
+      margin: 0;
+      padding: 0;
+    }
+    ul::after {
+      display: inline-block;
+    }
+
+    li {
+      display: inline-block;
+      height: 30px;
+      padding: 0;
+      border: 1px solid red;
+      margin: 0 0 10px;
+    }
+
+    .list1 {
+      counter-reset: list1 0;
+    }
+    .list2 {
+      counter-reset: list2 0;
+    }
+    .list3 {
+      counter-reset: list3 0;
+    }
+
+    .list1 li {
+      counter-increment: list1 1;
+    }
+    .list2 li {
+      counter-increment: list2 1;
+    }
+    .list3 li {
+      counter-increment: list3 1;
+    }
+
+    .list1::after {
+      content: 'total:' counter(list1);
+    }
+    .list2::after {
+      content: 'total:' counter(list2);
+    }
+    .list3::after {
+      content: 'total:' counter(list3);
+    }
+
+    .list1 li::before {
+      content: '(~~~~~' counter(list1) '～~~~~)';
+    }
+    .list2 li::before {
+      content: '(*****' counter(list2) '*****)';
+    }
+    .list3 li::before {
+      content: '(-----' counter(list3) '-----)';
+    }
+   </style>
+</head>
+<body>
+  <ul class="list1">
+    <li></li>
+  </ul>
+  <ul class="list2">
+    <li></li>
+    <li></li>
+  </ul>
+  <ul class="list3">
+    <li></li>
+    <li></li>
+    <li></li>
+  </ul>
+</body>
+</html>
