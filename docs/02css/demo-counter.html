@@ -23,49 +23,48 @@
       border: 1px solid red;
       margin: 0 0 10px;
     }
-
-    .list1 {
-      counter-reset: list1 0;
-    }
-    .list2 {
-      counter-reset: list2 0;
-    }
-    .list3 {
-      counter-reset: list3 0;
-    }
-
-    .list1 li {
-      counter-increment: list1 1;
-    }
-    .list2 li {
-      counter-increment: list2 1;
-    }
-    .list3 li {
-      counter-increment: list3 1;
-    }
-
-    .list1::after {
-      content: 'total:' counter(list1);
-    }
-    .list2::after {
-      content: 'total:' counter(list2);
-    }
-    .list3::after {
-      content: 'total:' counter(list3);
-    }
-
-    .list1 li::before {
-      content: '(~~~~~' counter(list1) '～~~~~)';
-    }
-    .list2 li::before {
-      content: '(*****' counter(list2) '*****)';
-    }
-    .list3 li::before {
-      content: '(-----' counter(list3) '-----)';
-    }
    </style>
 </head>
 <body>
+  <h1>统计子元素个数</h1>
+  <style>
+    .list1 {
+      counter-reset: list1 0;
+      li {
+        counter-increment: list1 1;
+        &::before {
+          content: '(~~~~~' counter(list1) '～~~~~)';
+        }
+      }
+      &::after {
+        content: 'total:' counter(list1);
+      }
+    }
+    .list2 {
+      counter-reset: list2 0;
+      li {
+        counter-increment: list2 1;
+        &::before {
+          content: '(*****' counter(list2) '*****)';
+        }
+      }
+      &::after {
+        content: 'total:' counter(list2);
+      }
+    }
+    .list3 {
+      counter-reset: list3 0;
+      li {
+        counter-increment: list3 1;
+        &::before {
+          content: '(-----' counter(list3) '-----)';
+        }
+      }
+      &::after {
+        content: 'total:' counter(list3);
+      }
+    }
+  </style>
   <ul class="list1">
     <li></li>
   </ul>
@@ -74,6 +73,131 @@
     <li></li>
   </ul>
   <ul class="list3">
+    <li></li>
+    <li></li>
+    <li></li>
+  </ul>
+  <h1>统计100以内的质数</h1>
+  <style>
+    .list4 {
+      counter-reset: list4 0 list5 0;
+      li {
+        border: none;
+        counter-increment: list4 1;
+        &::before {
+          content: counter(list4);
+        }
+        &:not(:first-child):not(:nth-child(2n+4)):not(:nth-child(3n+6)):not(:nth-child(5n+10)):not(:nth-child(7n+14)):not(:nth-child(11n+22)) {
+          font-weight: bold;
+          font-size: 22px;
+          color: red;
+          counter-increment: list4 1 list5 1;
+        }
+      }
+      &::after {
+        display: block;
+        content: counter(list4) '以内有' counter(list5) '个质数';
+      }
+    }
+  </style>
+  <ul class="list4">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
     <li></li>
     <li></li>
     <li></li>

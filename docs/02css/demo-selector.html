@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
-  <title>结构性伪类选择器</title>
+  <title>选择器</title>
+</head>
+<body>
+  <h3>深入理解xxx-child与xxx-of-type选择器的区别</h3>
   <style>
     .a p:first-child{
       background-color: red;
@@ -37,56 +40,83 @@
       background-color: pink;
     }
   </style>
-</head>
-<body>
-  <div>xxx-child选择器</div>
-  <div class="a">
-    <p>我是p</p>
-    <p>我是p</p>
-    <p>我是p</p>
-    <p>我是p</p>
-    <p>我是p</p>
-  </div>
-  <div class="a"><span>我是唯一span元素</span></div>
-  <hr/>
+  <div style="columns: 2;">
+    <div>xxx-child选择器 第1组</div>
+    <div class="a">
+      <p>我是p</p>
+      <p>我是p</p>
+      <p>我是p</p>
+      <p>我是p</p>
+      <p>我是p</p>
+    </div>
+    <div class="a"><span>我是唯一span元素</span></div>
 
-  <div>xxx-of-type选择器</div>
-  <div class="b">
-    <p>我是p</p>
-    <p>我是p</p>
-    <p>我是p</p>
-    <p>我是p</p>
-    <p>我是p</p>
+    <div>xxx-of-type选择器 第1组</div>
+    <div class="b">
+      <p>我是p</p>
+      <p>我是p</p>
+      <p>我是p</p>
+      <p>我是p</p>
+      <p>我是p</p>
+    </div>
+    <div class="b"><span>我是唯一span元素</span></div>
   </div>
-  <div class="b"><span>我是唯一span元素</span></div>
   <hr/>
+  <div style="columns:2;">
+    <div>xxx-child选择器 第2组</div>
+    <div class="a">
+      <div>我是div</div>
+      <p>我是p</p>
+      <p>我是p</p>
+      <p>我是p</p>
+      <p>我是p</p>
+    </div>
+    <div class="a"><label>我是唯一label元素</label><span>我是唯一span元素</span></div>
+    <div class="a"><span>我是span元素1</span><span>我是span元素2</span></div>
 
-  <div>xxx-child选择器 2组</div>
-  <div class="a">
-    <div>我是div</div>
-    <p>我是p</p>
-    <p>我是p</p>
-    <p>我是p</p>
-    <p>我是p</p>
+    <div>xxx-of-type选择器 第2组</div>
+    <div class="b">
+      <div>我是div</div>
+      <p>我是p</p>
+      <p>我是p</p>
+      <p>我是p</p>
+      <p>我是p</p>
+    </div>
+    <div class="b"><label>我是唯一label元素</label><span>我是唯一span元素</span></div>
+    <div class="b"><span>我是span元素1</span><span>我是span元素2</span></div>
   </div>
-  <div class="a"><div>我是唯一div元素</div><span>我是唯一span元素</span></div>
-  <hr/>
-
-  <div>xxx-of-type选择器 2组</div>
-  <div class="b">
-    <div>我是div</div>
-    <p>我是p</p>
-    <p>我是p</p>
-    <p>我是p</p>
-    <p>我是p</p>
-  </div>
-  <div class="b"><div>我是唯一div元素</div><span>我是唯一span元素</span></div>
-  <div class="b"><div>我是唯一div元素</div><span>我是唯一span元素1</span><span>我是唯一span元素2</span></div>
   <hr/>
   <div>
     <div>xxx-child与xxx-of-type选择器的最大区别在于，</div>
     <div>前者要匹配指定选择器，也要匹配位置，而后者只需要匹配指定选择器，</div>
     <div>另外，only-child与only-of-type稍微不同，两者都要求匹配选择器，但是前者要求只能有一个子元素，后者要求只能有一个匹配该选择器的子元素。</div>
   </div>
+  <hr/>
+
+  <h3>根据不同子元素数量显示不同样式</h3>
+  <style>
+    li { 
+      color: red;
+    }   
+    li:first-child:nth-last-child(2), li:first-child:nth-last-child(2) ~ li {
+      color: blue;
+    }   
+
+    li:first-child:nth-last-child(3), li:first-child:nth-last-child(3) ~ li { 
+      color: green;
+    }   
+  </style>
+  <ul>
+    <li>1</li>
+  </ul>
+  <ul>
+    <li>1</li>
+    <li>2</li>
+  </ul>
+  <ul>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+  </ul>
 </body>
 </html>
