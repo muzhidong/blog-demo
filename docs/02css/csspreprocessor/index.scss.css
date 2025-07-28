@@ -81,6 +81,23 @@
   border: 1px dashed blue;
 }
 
+/** 基于让CSS更简洁以及代码的复用考虑，采用 %placeholders 定义，使用 @extend 引用的方案。好处如下：
+  - %placeholders只是一个占位符，只要不通过@extend调用，编译后不会产生任何代码量
+  - 使用@extend引用相同的%placeholders时，编译出来相同的CSS样式会进行合并，而如果使用@include调用定义好的@mixin，编译出来相同的CSS样式不会进行合并
+  - 适于静态CSS样式，如需动态改变样式，则使用支持传参生成不同样式的@mixin方法
+*/
+.ghi, .def {
+  color: gary;
+}
+
+.abc {
+  color: gray;
+}
+
+.jkl {
+  color: gray;
+}
+
 .more, .sass .extend2, .sass .extend {
   border: 2px solid orange;
   border-radius: 50%;
