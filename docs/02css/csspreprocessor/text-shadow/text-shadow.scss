@@ -1,0 +1,20 @@
+/* text-shadow长阴影效果 */
+@function long-shadow($color_a, $color_b, $step, $opacity: 1) {
+  $gradient_steps: null;
+  @for $i from 1 through $step {
+    $weight: calc( ( $i - 1 ) / $step * 100 );
+    $color_mix: mix($color_b, rgba($color_a, $opacity), $weight);
+    $separator: null;
+    @if($i != $step){
+      $separator: #{','};
+    }
+    $gradient_steps: append( #{$gradient_steps}, #{$i}px #{$i}px $color_mix $separator );
+  }
+  @return $gradient_steps;
+}
+$bg: #3498db;
+h1 {
+  text-align: center;
+  font-size: 6rem;
+  text-shadow: long-shadow(darken($bg, 30%), $bg, 50, 0.5);
+}
