@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>主题切换</title>
+  <style>
+    /* 挂载在body下 */
+    .dark { 
+      --bg-color: #1b1b1b;
+      --text-color: #fff;
+      --theme: '我是黑夜';
+    }
+    .light {
+      --bg-color: #fff;
+      --text-color: #1b1b1b;
+      --theme: '我是白间'
+    }
+    /* 利用prefers-color-scheme规则，跟随系统主题，通过:root伪类切换主题色 */
+    @media (prefers-color-scheme: dark) {
+      :root:not(.dark):not(.light) {
+        --bg-color: #1b1b1b;
+        --text-color: #fff;
+        --theme: '跟随主题黑';
+      }
+    }
+    @media (prefers-color-scheme: light) {
+      :root:not(.dark):not(.light) {
+        --bg-color: #fff;
+        --text-color: #1b1b1b;
+        --theme: '跟随主题白';
+      }
+    }
+
+    body { 
+      color: var(--text-color);
+      background-color: var(--bg-color);
+    }
+    .txt {
+      padding: 5px;
+      border: 1px solid;
+      margin-right: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .theme {
+      padding-top: 10px;
+      &::after {
+        content: var(--theme);
+      }
+    }
+  </style>
+</head>
+<body class="os">
+  <h3>主题切换</h3>
+  <form onchange="toggleTheme(event)">
+    <label class="txt"><input type="radio" name="theme" value="os" checked/>跟随系统</label>
+    <label class="txt"><input type="radio" name="theme" value="dark" />黑夜</label>
+    <label class="txt"><input type="radio" name="theme" value="light" />白间</label>
+  </form>
+  <div class="theme">当前主题是：</div>
+  <script>
+    function toggleTheme (e) {
+      const theme = e.target.value;
+      document.body.className = theme;
+    }
+  </script>
+</body>
+</html>
