@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>text-box</title>
+</head>
+<body>
+  <style>
+    .en {
+      font-family: monospace,'Microsoft YaHei','PingFang SC',Arial;
+    }
+    .cn {
+      font-family: SimSun,serif;
+    }
+    .box {
+      margin-bottom: 20px;
+      & > span {
+        line-height: 5;
+        border-top: 5px solid red;
+        border-bottom: 5px solid red;
+      }
+    }
+    .box1 {
+      text-box-edge: cap alphabetic;
+      .one {
+        /* 指定要修剪的边 */
+        /* 取值：none(默认值)/trim-both/trim-start/trim-end  */
+        text-box-trim: trim-start;
+      }
+      .two {
+        text-box-trim: trim-end;
+      }
+      .three {
+        text-box-trim: trim-both;
+      }
+      .four {
+        text-box-trim: none;
+      }
+    }
+    .box2 {
+       text-box-trim: trim-both;
+       .one {
+          /* 指定要修剪的空间 */
+          /* The default value is auto. Equivalent to the text-edge value text.
+            Valid over edge trimming values: text, cap, and ex.
+            Valid under edge trimming values: text and alphabetic. */
+          text-box-edge: cap text;
+       }
+       .two {
+          text-box-edge: ex text;
+       }
+       .three {
+          text-box-edge: text;
+       }
+       .four {
+          text-box-edge: text alphabetic;
+       }
+    }
+    .box3 {
+      .one {
+        /* 不同字体的垂直间距不同，这导致在网页上保持一致的排版一直以来都颇具挑战性。
+           而text-box属性使得文本垂直间距的一致性更容易实现，是text-box-trim和text-box-edge的简写。*/
+        text-box: normal;
+      }
+      .two {
+        text-box: trim-both cap alphabetic;
+      }
+    }
+  </style>
+  <div class="box box1">
+    <span class="one"><span class="en">English</span><span class="cn">中文</span></span>
+    <span class="two"><span class="en">English</span><span class="cn">中文</span></span>
+    <span class="three"><span class="en">English</span><span class="cn">中文</span></span>
+    <span class="four"><span class="en">English</span><span class="cn">中文</span></span>
+  </div>
+  <div class="box box2">
+    <span class="one"><span class="en">English</span><span class="cn">中文</span></span>
+    <span class="two"><span class="en">English</span><span class="cn">中文</span></span>
+    <span class="three"><span class="en">English</span><span class="cn">中文</span></span>
+    <span class="four"><span class="en">English</span><span class="cn">中文</span></span>
+  </div>
+  <div class="box box3">
+    <span class="one"><span class="en">English</span><span class="cn">中文</span></span>
+    <span class="two"><span class="en">English</span><span class="cn">中文</span></span>
+  </div>
+</body>
+</html>
