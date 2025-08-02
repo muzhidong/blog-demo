@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>2D transform</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <style type="text/css">
+      * {
+        margin: 0;
+        padding: 0;
+        border: 0 none;
+      }
+    </style>
+  </head>
+  <body>
+    <h3>示例一：transform支持同时有多个变换，但有前后顺序之分</h3>
+    <style>
+      .block {
+        width: 100px;
+        height: 100px;
+        transition: all .5s;
+        cursor: pointer;
+      }
+
+      .block1 {
+        background: #adc;
+      }
+
+      .block1:hover {
+        transform: rotate(90deg) translate(100px, 0);
+      }
+
+      .block2 {
+        background: #ff5566;
+      }
+
+      .block2:hover {
+        transform: translate(100px, 0) rotate(180deg);
+      }
+    </style>
+    <div>
+      <div class="block block1">块1</div>
+      <div class="block block2">块2</div>
+    </div>
+
+    <h3>示例二：transform画圆角三角形</h3> 
+    <style>
+      .rounded-triangle {
+        position: relative;
+        width:  50px;
+        height: 50px;
+        border-top-right-radius: 30%;
+        background-color: cyan;
+        transform: rotate(-60deg) skewX(-30deg) scale(1,.866);
+      }
+      .rounded-triangle:before,
+      .rounded-triangle:after {
+        content: '';
+        position: absolute;
+        width:  50px;
+        height: 50px;
+        background-color: inherit;
+        border-top-right-radius: 30%;
+      }
+      .rounded-triangle:before {
+        transform: rotate(-135deg) skewX(-45deg) scale(1.414, .707) translate(0,-50%);
+      }
+      .rounded-triangle:after {
+        transform: rotate(135deg) skewY(-45deg) scale(.707, 1.414) translate(50%);
+      }
+    </style>
+    <div class="rounded-triangle" style="top: 20px;left: 100px;"></div>
+
+    <h3 style="padding-top:50px;">示例三：transform画梯形</h3>
+    <style>
+      .trapezoid {
+        display: flex;
+        justify-content: center;
+        align-items: center; 
+        width: 400px;
+        height: 180px;
+        color: rgb(255, 255, 255);
+        font-size: 48px;
+        position: relative;
+      }
+      .trapezoid::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: -1;
+          background: rgb(85, 136, 170);
+          /* 不足：斜边的角度依赖元素的宽度 */
+          transform: perspective(200px) rotateX(30deg) scaleY(2.25);
+          transform-origin: bottom;
+        }
+    </style>
+    <div class="trapezoid"></div>
+
+    <h3>示例四：transform不会改变元素的长度值，也不会影响依赖其的元素长度值（视觉上变化了，获取值还是原始值）</h3>
+    <style>
+      #parent {
+        background: #272727;
+      }
+    </style>
+    <div id="parent" style="height:100px;transform:scaleY(1.2) translateY(10px);">
+      <div id="child" style="height:100%;"></div>
+    </div>
+    <script>
+      const parent = document.getElementById('parent');
+      const child = document.getElementById('child');
+      // parent: 100, child: 100
+      console.log(`parent: ${parent.offsetHeight}, child: ${child.offsetHeight}`)
+    </script>
+
+    <h3 style="margin-top: 20px;">示例五：transform会对绝对定位或固定定位元素裁剪或出现滚动条(有设置overflow的话)，并变成它的相对参考点</h3>
+    <div style="overflow:auto;height: 50px;background: blue;">
+      <div style="transform: translate(0,10px);background: yellow;height: 100%;">
+        <div style="position: fixed;top: 10px;width: 20px;height: 100px;background: red;"></div>
+      </div>
+    </div>
+
+    <h3>示例六：transform会创建层叠上下文</h3>
+    <style>
+      .outter {
+        height: 100px;
+        background: green;
+        /* 创建层叠上下文，使它在负值z-index之下 */
+        transform: scale(1);
+      }
+      .inner {
+        height: 50px;
+        background: blue;
+        position: relative;
+        z-index: -1;
+      }
+    </style>
+    <div class="outter">
+      <div class="inner"></div>
+    </div>
+  </body>
+</html>
