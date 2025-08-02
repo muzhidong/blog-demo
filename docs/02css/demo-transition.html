@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>transition</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <style type="text/css">
+      html,
+      body {
+        padding: 0;
+        border: 0 none;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h3>示例一</h3>
+    <style>
+      ul.list {
+        padding: 0;
+        margin: 0;
+        background: orange;
+        list-style: none;
+        li {
+          text-align: center;
+          transition: all .3s;
+          cursor: pointer;
+          &:hover {
+            font-size: 20px;
+            background: pink;
+          }
+        }
+      }
+    </style>
+    <ul class="list">
+      <li>你好</li>
+      <li>你好</li>
+      <li>你好</li>
+      <li>你好</li>
+    </ul>
+
+    <h3>示例二：Tab切换下划线跟随效果</h3>
+    <style>
+      ul.list2 {
+        display: flex;
+        list-style: none;
+        li {
+          position: relative;
+          padding: 20px;
+          color: #000;
+          line-height: 1;
+          font-size: 24px;
+          transition: 0.2s all linear;
+          cursor: pointer;
+          &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 100%;
+            width: 0;
+            height: 100%;
+            border-bottom: 2px solid #000;
+            transition: 0.2s all linear;
+          }
+          &:hover::before {
+            width: 100%;
+            left: 0;
+            transition-delay: 0.1s;
+          }
+          &:hover~li::before {
+            left: 0;
+          }
+        }
+      }
+      </style>
+    <ul class="list2">
+      <li>不可思议的CSS</li>
+      <li>导航栏</li>
+      <li>光标下划线跟随</li>
+      <li>PURE CSS</li>
+      <li>Coco</li>
+    </ul>
+    
+    <h3>示例三：悬浮时下划线左进右出效果</h3>
+    <style>
+      .effect {
+        position: absolute;
+    
+        &::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          width: 100%;
+          height: 2px;
+          background: deeppink;  
+          transform: scaleX(0);
+          /* 关键代码：通过transform-origin属性调整transform属性的原点 */
+          transform-origin: 100% 0;
+          transition: transform .5s;
+        }
+    
+        &:hover::before {
+          transform: scaleX(1);
+          transform-origin: 0 0;
+        }
+
+        a {
+          text-decoration: none;
+          color: currentColor;
+        }
+      }
+    </style>
+    <div class="effect">
+      <a href="https://codepen.io/Chokcoco/pen/ELxmwE" target="_blank">更多效果：https://codepen.io/Chokcoco/pen/ELxmwE</a>
+    </div>
+  </body>
+</html>
