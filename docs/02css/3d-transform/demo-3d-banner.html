@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>3D轮播图</title>
+    <style type="text/css">
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: #000;
+      }
+
+      .stage {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        width: 1000px;
+        height: 200px;
+        margin: auto;
+
+        background: #fff;
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+
+        /*1.设置透视距离，实现图片3D效果*/
+        -webkit-perspective: 500px;
+        -moz-perspective: 500px;
+        perspective: 500px;
+      }
+
+      .stage-div {
+        width: 100px;
+        height: 131px;
+
+        position: relative;
+        top: 34.5px;
+        left: 50%;
+        margin-left: -50px;
+
+        /*2.实现图片内容3D效果*/
+        -webkit-transform-style: preserve-3d;
+        -moz-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+
+        /*3.实现图片过渡效果*/
+        -webkit-transition: -webkit-transform 1s;
+        -moz-transition: -moz-transform 1s;
+        transition: transform 1s;
+
+        cursor: pointer;
+      }
+
+      .stage-div div {
+
+        position: absolute;
+        bottom: 0;
+
+        width: 100px;
+        height: 131px;
+
+        box-shadow: 0 1px 3px rgba(0, 0, 0, .5);
+
+        /*4.不允许穿过前面内容看到后面内容*/
+        -webkit-backface-visibility: hidden;
+        -moz-backface-visibility: hidden;
+        backface-visibility: hidden;
+      }
+
+      .stage-div div:nth-child(1) {
+        background: url(../images/01.png) no-repeat;
+        /*不利于SEO和懒加载，但可以实现响应式图片*/
+      }
+
+      .stage-div div:nth-child(2) {
+        background: url(../images/02.png) no-repeat;
+      }
+
+      .stage-div div:nth-child(3) {
+        background: url(../images/03.png) no-repeat;
+      }
+
+      .stage-div div:nth-child(4) {
+        background: url(../images/04.png) no-repeat;
+      }
+
+      .stage-div div:nth-child(5) {
+        background: url(../images/05.png) no-repeat;
+      }
+
+      .stage-div div:nth-child(6) {
+        background: url(../images/06.png) no-repeat;
+      }
+
+      .stage-div div:nth-child(7) {
+        background: url(../images/07.png) no-repeat;
+      }
+
+      .stage-div div:nth-child(8) {
+        background: url(../images/10.png) no-repeat;
+      }
+
+      .stage-a {
+        height: 30px;
+
+        line-height: 30px;
+        word-spacing: 2px;
+        text-decoration: none;
+
+        font-size: 14px;
+        color: #000;
+        font-weight: bold;
+        font-family: "宋体";
+
+        position: absolute;
+        bottom: 5px;
+        right: 20px;
+      }
+
+      .stage-a:hover {
+        color: #f00;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <section class="stage">
+      <div class="stage-div">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <a href="http://www.zhangxinxu.com/wordpress/2012/09/css3-3d-transform-perspective-animate-transition/"
+         class="stage-a">
+        参 考 链 接</a>
+    </section>
+  </body>
+
+  <script>
+    (function() {
+      transform = function(elem, value, key) {
+        key = key || "Transform";
+        ["Moz", "Webkit", "Ms", "O", ""].forEach(function(prefix) {
+          elem.style[prefix + key] = value;
+        });
+        return elem;
+      }
+
+      $ = function(selector) {
+        return document.querySelector(selector);
+      }
+
+      $$ = function(selector) {
+        return document.querySelectorAll(selector);
+      }
+
+      //5.为容器设置监听，而不是为每个图片设置监听
+      var container = $(".stage-div");
+      container.addEventListener("mouseover", stop, false);
+      container.addEventListener("mouseout", start, false);
+      // container.addEventListener("click", start, false);
+
+      //为每个图片初始化，其中translateZ函数的取值表示含义
+      //50 / Math.tan(45 * Math.PI / 360)：图片中心轴距旋转轴的距离
+      //20：偏移量，使图片之间有间隔
+      var arr = $$(".stage-div div");
+      arr.forEach(function(elem, i) {
+        transform(elem, "rotateY(" + (45 * i) + "deg) translateZ(" + (50 / Math.tan(45 / 2 * Math
+          .PI / 180) + 20) + "px)")
+      });
+
+      var id, last;
+      //默认初始启动自轮播
+      start(0);
+
+      //启动自轮播
+      function start(j) {
+        //当从mouseover变为mouseout时，需要从last取值，赋给last
+        if (typeof j === 'object') {
+          j = last;
+        }
+        //通过改变图片的容器的角度，而不是通过改变所有图片的节点对象的角度     
+        transform($(".stage-div"), "rotateY(" + (-45 * j) + "deg)");
+        //应该用setTimeout，而不是setInterval，且使用setInterval时参数如何变化呢，因为只被调用一次
+        id = setTimeout(start, 1000, ++j);
+        //记录上次的取值
+        if (typeof j === 'number') {
+          last = j;
+        }
+      }
+
+      //停止自轮播
+      function stop() {
+        // clearInterval可以取消setTimeout
+        clearInterval(id);
+        id = null;
+      }
+
+      //切换tab监听
+      document.addEventListener('visibilitychange', function() { //浏览器切换事件
+        if (document.visibilityState == 'hidden') { //状态判断
+          stop();
+        } else {
+          start(last);
+        }
+      });
+    })();
+  </script>
+</html>

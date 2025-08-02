@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>魔方</title>
+  <style>
+    html,
+    body {
+      height: 100%;
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .magic {
+      /* 设置合适的透视距离 */
+      perspective: 300cm;
+      perspective-origin: center;
+      
+      .magic-wrapper {
+        width: 3cm;
+        height: 3cm;
+        background: gray;
+        transform-style: preserve-3d;
+        transform-origin: center;
+        /* 设置起始角度 */
+        transform: rotate3d(1, 1, 1, 90deg);
+        transition: transform .1s;
+        /* counter-reset: count 0; */
+        
+        & > div {
+          position: absolute;
+          width: 3cm;
+          height: 3cm;
+          text-align: center;
+          line-height: 3cm;
+          backface-visibility: visible;
+          /* 分割线，每面呈现3*3效果 */
+          background-image: linear-gradient(transparent 0, transparent calc(100% - 1px), rgba(0, 0, 0, 1) calc(100% - 1px), rgba(0, 0, 0, 1) 100%, transparent 100%),
+            linear-gradient(90deg, transparent 0, transparent calc(100% - 1px), rgba(0, 0, 0, 1) calc(100% - 1px), rgba(0, 0, 0, 1) 100%, transparent 100%);
+          background-size: 1cm 1cm;
+          /* counter-increment: count;
+          &::before {
+            content: counter(count);
+          } */
+        }
+      }
+    }
+    /* 六个面做平移、旋转 */
+    .up {
+      background-color: yellow;
+      transform: translateZ(1.5cm);
+    }
+    .down {
+      background-color: #eee;
+      transform: translateZ(-1.5cm) rotateY(180deg);
+    }
+    .left {
+      background-color: orange;
+      transform: translateX(-1.5cm) rotateY(-90deg);
+    }
+    .right {
+      background-color: red;
+      transform: translateX(1.5cm) rotateY(90deg);
+    }
+    .front {
+      background-color: blue;
+      transform: translateY(1.5cm) rotateX(90deg);
+    }
+    .back {
+      background-color: green;
+      transform: translateY(-1.5cm) rotateX(-90deg);
+    }
+  </style>
+</head>
+<body>
+  <div class="magic">
+    <div class="magic-wrapper">
+      <div class="up"></div>
+      <div class="down"></div>
+      <div class="left"></div>
+      <div class="right"></div>
+      <div class="front"></div>
+      <div class="back"></div>
+    </div>
+  </div>
+  <script>
+    window.addEventListener('load', function(){
+      const magicWrapperEl = document.querySelector('.magic-wrapper');
+      const startAngle = 45
+      let count = 1
+      const fn = () => {
+        setTimeout(() => {
+          const angle = startAngle + 10 * count++
+          magicWrapperEl.style.transform = `rotate3d(1, 1, 1, ${angle}deg)`;
+          fn()
+        }, 200);
+      }
+      fn()
+    })
+  </script> 
+</body>
+</html>
