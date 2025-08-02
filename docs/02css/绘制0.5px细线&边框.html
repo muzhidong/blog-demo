@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=0.5">
+  <title>绘制0.5px细线和边框</title>
+  <!-- 考察transform、渐变、border-image -->
+  <style>
+    .half-line-height {
+      display: block;
+      height: .5px;
+      background: #000;
+    }
+
+    .half-line-scale {
+      display: block;
+      height: 1px;
+      transform: scaleY(.5);
+      transform-origin: top;
+      background: #000;
+    }
+
+    .half-line-gradient {
+      display: block;
+      height: 1px;
+      background-image: linear-gradient(0deg, transparent 50%, #000 50%);
+    }
+
+    .half-border-pseudo-element-scale {
+      --w: 100px;
+      --h: 100px;
+      width: var(--w);
+      height: var(--h);
+      position: relative;
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: calc(var(--w) * 2);
+        height: calc(var(--h) * 2);
+        border: 1px solid #000;
+        box-sizing: border-box;
+        transform: scale(.5) translateX(-50%);
+        transform-origin: top;
+      }
+    }
+
+    .half-border-border-image {
+      width: 100px;
+      height: 100px;
+      border-image-source: linear-gradient(0deg, #000);
+      /* 10%要求作用元素的宽高不低于5px，若低于5px，本身就很难观察了，何况边框 */
+      border-image-slice: 10%;
+      border-image-width: .5px;
+      border-image-repeat: repeat;
+      border-image-outset: .5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>绘制0.5px细线</h1>
+  <h2>方式1：height:.5px;</h2>
+  <div class="half-line-height"></div>
+  <h2>方式2：transform:scaleY(.5)</h2>
+  <div class="half-line-scale"></div>
+  <h2>方式3：background-image:linear-gradient()</h2>
+  <div class="half-line-gradient"></div>
+  <h2>方式4：svg</h2>
+  <svg xmlns="http://www.w3.org/2000/svg"
+      width="100%"
+      height="0.5px">
+    <line x1="0"
+      y1="0"
+      x2="100%"
+      y2="0"
+      stroke="#000"></line>
+  </svg>
+  <h2>方式5：vw/vh单位</h2>
+  <div id="vh" style="background-color: #000;"></div>
+  <br />
+  <div id="vw" style="background-color: #000;"></div>
+  <script>
+    const vwEl = document.querySelector('#vw')
+    const vhEl = document.querySelector('#vh')
+    vwEl.style.height = 100 * 0.5 / window.innerWidth + 'vw'
+    vhEl.style.height = 100 * 0.5 / window.innerHeight + 'vh'
+  </script>
+  <br />
+  <div>注意：方式1和方式5需要height支持小数，而在ReactNative中是不支持的</div>
+  
+
+  <h1>绘制0.5px边框</h1>
+  <h2>方式1：before伪元素 + transform:scale(.5)</h2>
+  <div class="half-border-pseudo-element-scale"></div>
+  <h2>方式2：border-image</h2>
+  <div class="half-border-border-image"></div>
+</body>
+</html>
