@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>多列布局</title>
+</head>
+<body>
+  <h3>多列布局</h3>
+  <style>
+    .column-layout{
+      columns: 3;
+      column-rule: double red medium;
+      column-gap: 20px;
+
+      div {
+        border: 1px solid;
+        margin: 4px 0;
+      }
+    }
+    .cross-column {
+      column-span: all;
+    }
+  </style>
+  <div class="column-layout">
+    <div>史上最具杀伤绕口令！</div>
+    <div>第一关：老龙恼怒闹老农，老农恼怒闹老龙。农怒龙恼农更怒，龙恼农怒龙怕农</div>
+    <div>第二关：牛郎恋刘娘,刘娘恋牛郎,牛郎年年念刘娘,刘娘年年恋牛郎,郎念娘来娘恋郎</div>
+    <div>第三关：七巷一个漆匠，西巷一个锡匠。七巷漆匠用了西巷锡匠的锡，西巷锡匠拿了七巷漆匠的漆，七巷漆匠气西巷锡匠用了漆，西巷锡匠讥七巷漆匠拿了锡。</div>
+    <div>第四关：初级：大声说20遍（红凤凰）<br/>
+      中级：大声说20遍（粉红凤凰）</div>
+    <div class="cross-column">第五关：1、初入江湖：化肥会挥发<br/>
+    2、小有名气：黑化肥发灰，灰化肥发黑<br/>
+    3、名动一方：黑化肥发灰会挥发；灰化肥挥发会发黑<br/>
+    4、天下闻名：黑化肥挥发发灰会花飞；灰化肥挥发发黑会飞花<br/>
+    5、一代宗师：黑灰化肥会挥发发灰黑讳为花飞；灰黑化肥会挥发发黑灰为讳飞花<br/>
+    6、超凡入圣：黑灰化肥灰会挥发发灰黑讳为黑灰花会飞；灰黑化肥会会挥发发黑灰为讳飞花化为灰<br/>
+    7、天外飞仙：黑化黑灰化肥灰会挥发发灰黑讳为黑灰花会回飞；灰化灰黑化肥会会挥发发黑灰为讳飞花回化为灰</div>
+  </div>  
+</body>
+</html>
