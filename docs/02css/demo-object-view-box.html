@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>object-view-box</title>
+  <style>
+    @property --per {
+      syntax: "<integer>";
+      initial-value: 0;
+      inherits: false;
+    }
+
+    #image {
+      display: none;
+      width: 100px;
+      transition: --per 1s;
+      /* 实现图片在指定大小中按传入的top、left、bottom、right偏移量部分展示 */
+      object-view-box: inset(
+        calc(((var(--per) / 100) * (10 - 30) + 30) * 1%)
+        calc(((var(--per) / 100) * (50 - 0) + 0) * 1%)
+        calc(((var(--per) / 100) * (35 - 10) + 10) * 1%)
+        calc(((var(--per) / 100) * (5 - 50) + 50) * 1%)
+      );
+    }
+
+    #image:hover {
+      --per: 100;
+    }
+
+    @supports (object-view-box: inset(0)) {
+      .support-warning {
+        display: none;
+      }
+      #image {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="support-warning">
+    <p>
+      Your browser doesn't support CSS object-view-box. To view this feature
+      use Chrome and
+      <a href="chrome://flags/#enable-experimental-web-platform-features"
+         target="_blank">enabled Experimental Web Platform Features.</a>
+    </p>
+  </div>
+  <img src="./images/01.png" />
+  <img id="image" src="./images/01.png" />
+</body>
+</html>
