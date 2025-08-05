@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>父元素实现"行内块"子元素的省略效果</title>
+  <!-- 考察：display:inline-block对父元素的省略效果 -->
+  <style>
+    .card {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      width: 200px;
+      padding: 5px;
+      border: 1px solid #999;
+      box-shadow: #999 1px -1px 10px;
+      box-sizing: border-box;
+    }
+    .card-avatar {
+      flex-grow: 0;
+      flex-shrink: 0;
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      margin-right: 5px;
+      background-color: cornflowerblue;
+    }
+    .card-content {
+      display: flex;
+      flex-direction: column;
+    }
+    .card-title {
+      color: #333;
+      line-height: 14px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .card-labels {
+      width: 140px;
+      line-height: 16px;
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .card-labels > span {
+      /* 关键点 */
+      display: inline-block;
+      padding: 4px;
+      color: white;
+      background-color: blueviolet;
+      &:not(:last-child) {
+        margin-right: 2px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="card">
+    <a href="/" class="card-avatar"></a>
+    <div class="card-content">
+      <div class="card-title">Abc</div>
+      <div class="card-labels">
+        <span>前端</span>
+        <span>后端</span>
+        <span>运维</span>
+        <span>测试</span>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

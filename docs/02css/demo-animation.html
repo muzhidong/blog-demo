@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>css实现loading动画</title>
+  <!-- 考察：动画 -->
+  <style>
+    :root {
+      --color: black;
+      --time: 1.5s;
+      --size: 100px;
+    }
+    
+    html,
+    body,
+    .container {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    h1 {
+      font-family: 'Helvetica', 'Arial', sans-serif;
+      font-size: 1.05rem;
+    }
+    
+    .logo {
+      position: relative;
+      width: var(--size);
+      height: var(--size);
+      box-sizing: border-box;
+      background-color: white;
+    }
+    .logo::before,
+    .logo::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      border: 4px solid transparent;
+      animation-timing-function: linear;
+    }
+    .logo::before {
+      top: 0;
+      left: 0;
+      border-top-color: var(--color);
+      border-right-color: var(--color);
+      animation: border-before var(--time) infinite;
+      animation-direction: alternate;
+    }
+    .logo::after {
+      bottom: 0;
+      right: 0;
+      border-bottom-color: var(--color);
+      border-left-color: var(--color);
+      animation: border-after var(--time) infinite;
+      animation-direction: alternate;
+    }
+    .logo > div {
+      position: absolute;
+    }
+    .red {
+      top: 4px;
+      bottom: 0;
+      left: 0;
+      border-right: 4px solid var(--color);
+      background-color: #EA5664;
+      animation: red var(--time) infinite;
+      animation-direction: alternate;
+    }
+    .orange {
+      bottom: 0;
+      left: 27%;
+      right: 4px;
+      border-top: 4px solid var(--color);
+      background-color: #F3B93F;
+      animation: orange var(--time) infinite;
+      animation-direction: alternate;
+    }
+    .white {
+      right: 5px;
+      top: 4px;
+      bottom: 50%;
+      height: 50%;
+      border-left: 4px solid var(--color);
+      background-color: #fff;
+      animation: white var(--time) infinite;
+      animation-direction: alternate;
+    }
+    
+    @keyframes border-before {
+      0% {
+        width: 0;
+        height: 0;
+        border-right-color: transparent;
+      }
+      5.99% {
+        border-right-color: transparent;
+      }
+      6% {
+        width: 100%;
+        height: 0;
+        border-right-color: var(--color);
+      }
+      25%,
+      100% {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    
+    @keyframes border-after {
+      0%,
+      24.99% {
+        width: 0;
+        height: 0;
+        border-left-color: transparent;
+        border-bottom-color: transparent;
+      }
+      25% {
+        border-left-color: transparent;
+        border-bottom-color: var(--color);
+      }
+      36.99% {
+        border-left-color: transparent;
+      }
+      37% {
+        height: 0;
+        width: 100%;
+        border-left-color: var(--color);
+      }
+      50%,
+      100% {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    
+    @keyframes red {
+      0%,
+      50% {
+        width: 0;
+        opacity: 0;
+      }
+      50.01% {
+        opacity: 1;
+      }
+      65%,
+      100% {
+        width: 27%;
+        opacity: 1;
+      }
+    }
+    
+    @keyframes orange {
+      0%,
+      65% {
+        height: 0;
+        opacity: 0;
+      }
+      65.01% {
+        opacity: 1;
+      }
+      80%,
+      100% {
+        height: 50%;
+        opacity: 1;
+      }
+    }
+    
+    @keyframes white {
+      0%,
+      75% {
+        width: 0;
+        opacity: 0;
+      }
+      75.01% {
+        opacity: 1;
+      }
+      90%,
+      100% {
+        width: 27%;
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <div class="white"></div>
+      <div class="orange"></div>
+      <div class="red"></div>
+    </div>
+    <h1>Loading ...</h1>
+  </div>
+</body>
+</html>
