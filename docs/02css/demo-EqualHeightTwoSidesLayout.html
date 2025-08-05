@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>等高的左右布局</title>
+  <!-- 考察：flex布局、display: table/table-cell、盒模型、float与格式上下文 -->
+</head>
+<body>
+  <h1>左定宽右自适应的flex等高布局</h1>
+  <div class="parent">
+    <div class="left">
+      <p>left</p>
+    </div>
+    <div class="right">
+      <p>right</p>
+    </div>
+  </div>
+  <style>
+    .parent {
+      display: flex;
+    }
+    .left {
+      width: 200px;
+      background: red;
+    }
+    .right {
+      flex: 1;
+      background: blue;
+    }
+  </style>
+
+  <h1>左不定宽右自适应的flex等高布局</h1>
+  <div class="parent2">
+    <div class="left2">
+      <div class="content2">
+        <button onclick="onClick()">改变宽度</button>
+      </div>
+    </div>
+    <div class="right2">
+      <p>right</p>
+    </div>
+  </div>
+  <style>
+    .parent2 {
+      display: flex;
+    }
+    .left2 {
+      background: red;
+      .content2 {
+        width: 200px;
+      }
+    }
+    .right2 {
+      background: blue;
+      flex: 1;
+    }
+  </style>
+  <script>
+    const content2El = document.querySelector('.content2')
+    function onClick() {
+      content2El.style.width = (100 + Math.random() * 400) + 'px'
+    }
+  </script>
+
+  <h1>左右两边设置较大padding-bottom的等高布局</h1>
+  <div class="parent3">
+    <div class="left3">
+      <p>left</p>
+    </div>
+    <div class="right3">
+      <p>right</p>
+      <p>right</p>
+    </div>
+  </div>
+  <style>
+    .parent3 {
+      overflow: hidden;
+    }
+    .left3,
+    .right3 {
+      padding-bottom: 9999px;
+      margin-bottom: -9999px;
+      background: #999;
+    }
+    .left3 {
+      float: left; 
+      width: 200px;
+      border-right: 1px solid red;
+    }
+    .right3 {
+      /* 格式上下文，不受float影响 */
+      overflow: hidden;
+    }
+  </style>
+
+  <h1>父元素设置为table，左右两边设置为table-cell的等高布局</h1>
+  <div class="parent4">
+    <div class="left4">
+      <p>left</p>
+    </div>
+    <div class="right4">
+      <p>right</p>
+      <p>right</p>
+    </div>
+  </div>
+  <style>
+  .parent4 {
+    display: table;
+    width: 100%;
+  }
+  .right4,
+  .left4 {
+    display: table-cell;
+  }
+  .left4 {
+    width: 100px;
+    background: red;
+  }
+  .right4 {
+    background: blue;
+  }
+  </style>
+</body>
+</html>
