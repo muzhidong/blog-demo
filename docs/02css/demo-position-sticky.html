@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>position:sticky实现头部高度自动伸缩</title>
+  <style>
+    body {
+      --height-outer: 120px;
+      --height-inner: 60px;
+      margin: 0;
+      background-color: #eee;
+      font-family: system-ui;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+
+      /* 关键代码 */
+      position: sticky;
+      /* ！！！这里之所以内高减去外高，是希望滚动这个位置时，外部sticky元素固定，此时页面顶部展示的高度恰好是内部元素高度，而内部元素也设置了sticky固定，且top为0，实现了第二种固定高度的效果 */
+      top: calc(var(--height-inner) - var(--height-outer));
+      
+      height: var(--height-outer);
+      border-bottom: 1px solid #ccc;
+      
+      background-color: #fff;
+    }
+
+    header-inner {
+      display: flex;
+      justify-content: space-between;
+      
+      /* 关键代码 */
+      position: sticky;
+      top: 0;
+      
+      width: 980px;
+      max-width: calc(100% - 2rem);
+      margin: 0 auto;
+      
+      line-height: var(--height-inner);
+    }
+
+    h1 {
+      margin: 0;
+    }
+
+    main {
+      height: 200vh;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <header-inner>
+      <h1>LOGO</h1>
+    </header-inner>
+  </header>
+  <main></main>
+</body>
+</html>
