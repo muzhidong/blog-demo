@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>css实现多风格背景图切换效果</title>
+    <!-- 考察clip-path、属性选择器提高优先级、:has伪类选择器 -->
+    <style>
+      .container {
+        display: flex;
+        position: relative;
+      }
+      .theme {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        border-radius: .375rem;
+        outline: 1px solid rgba(99, 102, 241, .25);
+        transition: clip-path .3s ease-in;
+        will-change: clip-path;
+      }
+      .container .theme:not(:first-child) {
+        /* 100%是相对于自身，负值表示向左移动，不会脱离文档流，最终效果是4张图片层叠在一起 */
+        margin-left: -100%;
+      }
+      .theme:nth-child(1) {
+        /* 裁剪，此处polygon函数传4个参数，定义了4个顶点的坐标位置，按从左到右，从上到下的顺时针顺序添加顶点 */
+        clip-path: polygon(0 0, calc(100% / 6 + 1px) 0, calc(100% / -12 + 1px) 100%, -25% 100%);
+      }
+      .theme:nth-child(2) {
+        clip-path: polygon(calc(100% / 6) 0, calc(100% / 3 + 1px) 0, calc(100% / 12 + 1px) 100%, calc(100% / -12) 100%);
+      }
+      .theme:nth-child(3) {
+        clip-path: polygon(calc(100% / 3) 0, calc(50% + 1px) 0, calc(25% + 1px) 100%, calc(100% / 12) 100%);
+      }
+      .theme:nth-child(4) {
+        clip-path: polygon(50% 0, 100% 0, 100% 100%, 25% 100%);
+      }      
+      .theme[alt]:hover {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+      }
+      /* 前相邻兄弟选择器 */
+      .theme[alt]:has(~.theme:hover) {
+        clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+      }
+      /* 后相邻兄弟选择器 */
+      .theme[alt]:hover ~ .theme {
+        clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <img
+        alt="Theme - Classic"
+        src="./images/theme-classic.webp"
+        class="theme"
+      />
+      <img
+        alt="Theme - Dawn"
+        src="./images/theme-dawn.webp"
+        class="theme"
+      />
+      <img
+        alt="Theme - Jungle"
+        src="./images/theme-jungle.webp"
+        class="theme"
+      />
+      <img
+        alt="Theme - Rose"
+        src="./images/theme-rose.webp"
+        class="theme"
+      />
+    </div>
+  </body>
+</html>
