@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>css自定义title属性样式</title>
+  <!-- 考察：伪元素、attr、transition -->
+  <style>
+    .wrapper {
+      text-align: center;
+      color: #e8684a;
+      font-size: .9rem;
+
+      .title {
+        position: relative;
+        user-select: none;
+
+        &::after {
+          content: attr(data-title);
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          bottom: -2em;
+          padding: 4px 10px;
+          color: rgb(22, 22, 22);
+          white-space: nowrap;
+          font-size: 12px;
+          background-color: rgba(167, 163, 163, 0.8);
+          box-shadow: 0 0 4px rbga(0, 0, 0, 0.16);
+          opacity: 0;
+          border-radius: 4px;
+          z-index: 99999;
+          transition: opacity .1s ease .5s;
+        }
+
+        &:hover::after {
+          opacity: 1;
+        }
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <span class="title" data-title="自定义title属性样式">自定义title属性样式</span>
+  </div>
+</body>
+</html>
