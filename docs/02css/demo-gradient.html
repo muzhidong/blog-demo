@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>渐变</title>
+</head>
+<body>
+  <h3>linear-gradient实现虚线</h3>
+  <style>
+    .dash-line {
+      width: 100%;
+      border-bottom: 1px solid transparent;
+      background-image: linear-gradient(to right, #999 0%, #999 25%, transparent 0, transparent 75%, #999 0);
+      background-repeat: repeat-x;
+      background-size: 8px 1px;
+      transform: scaleY(0.5);
+    }
+  </style>
+  <div class="dash-line"></div>
+
+  <h3>linear-gradient实现斜条纹效果</h3>
+  <style>
+    .bg {
+      width: 100%;
+      height: 3px;
+      /* 如果某个色标的位置值比整个列表中在它之前的色标的位置值都要小，则该色标的位置值会被设置为它前面所有色标位置值的最大值 */
+      background-image: linear-gradient(45deg, 
+        rgb(255, 187, 51) 25%, 
+        rgb(85, 136, 187) 0, 
+        rgb(85, 136, 187) 50%, 
+        rgb(255, 187, 51) 0, 
+        rgb(255, 187, 51) 75%, 
+        rgb(85, 136, 187) 0
+      );
+      /* 另一种快速实现方式 */
+      /* background: repeating-linear-gradient(45deg,
+        rgb(255, 187, 51), 
+        rgb(255, 187, 51) 15px, 
+        rgb(85, 136, 187) 0, 
+        rgb(85, 136, 187) 30px
+      );
+      background-size: 30px 30px; */
+    }
+  </style>
+  <div class="bg"></div>
+
+  <h3>radial-gradient实现卡券效果</h3>
+  <style>
+    .parent {
+      --width: 200px;
+      --height: 200px;
+      --r: 10px;
+      --left: 150px;
+      --l-color: #fc3a28;
+      --r-color: #fc3a28;
+      --sm-r: 5px;
+      --sm-offset: 20px;
+      --sm-color: #fc3a28;
+      width: var(--width);
+      height: var(--height);
+      /* 
+        --left - 1px 是为了避免某些百分百比缩放页面时，出现空隙
+        --r + 1px 是为了防止出现锯齿
+        51% 是为了防止出现元素中间会有一小段空白区域的情况 
+      */
+      background: radial-gradient(circle at left top, transparent var(--r), var(--l-color) calc(var(--r) + 1px)) calc(var(--left) - 1px) top / 100% 51% no-repeat,
+        radial-gradient(circle at left bottom, transparent var(--r), var(--l-color) calc(var(--r) + 1px)) calc(var(--left) - 1px) bottom / 100% 51% no-repeat,
+        radial-gradient(circle at  right top, transparent var(--r), var(--r-color) calc(var(--r) + 1px)) calc((var(--width) - var(--left)) * -1) top / 100% 51% no-repeat,
+        radial-gradient(circle at right bottom , transparent var(--r), var(--r-color) calc(var(--r) + 1px)) calc((var(--width) - var(--left)) * -1) bottom  / 100% 51% no-repeat;
+      filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, .2));
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: calc(-1 * var(--sm-r));
+        width: var(--sm-r);
+        height: 100%;
+        background-image: radial-gradient(circle at var(--sm-r), transparent var(--sm-r), var(--r-color) calc(var(--sm-r) + 1px));
+        background-size: var(--sm-r) var(--sm-offset);
+      } 
+    }
+    .child {
+      line-height: 200px;
+    }
+  </style>
+  <div class="parent">
+    <div class="child"></div>
+  </div>
+
+  <h3>conic-gradient轻松实现饼图</h3>
+  <style>
+    .pie {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: conic-gradient(from 0.25turn, red 120deg,blue 120deg 240deg, green 240deg);
+      box-shadow: 5px 5px 10px #999;
+    }
+  </style>
+  <div class="pie"></div>
+</body>
+</html>
