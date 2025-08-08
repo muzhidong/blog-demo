@@ -118,5 +118,40 @@
     <li>2</li>
     <li>3</li>
   </ul>
+
+  <h3>:is()与:where()伪类选择器的区别</h3>
+  <style>
+    .item-where:where(.red) {
+      background: black;
+    }
+  
+    .item-is:is(.red) {
+      background: black;
+    }
+  
+    .item-where,
+    .item-is {
+      width: 100px;
+      height: 100px;
+      background: green;
+    }
+  </style>
+  <!-- 绿色 -->
+  <div class="item-where red"></div>
+  <!-- 黑色 -->
+  <div class="item-is red"></div>
+  
+  <h3>:has()不支持无效选择器</h3>
+  <style>
+    /* .item-has:has(+ p, ~ :hover, ~ :abc) { */
+    /* .item-has:has(+ p, ~ :hover,) { */
+    .item-has:has(+ p, ~ :hover) {
+      width: 100px;
+      height: 100px;
+      background-color: blue;
+    }
+  </style>
+  <div class="item-has"></div>
+  <p></p>
 </body>
 </html>
