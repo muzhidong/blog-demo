@@ -27,13 +27,16 @@
 - https://iconstore.co/
 
 # 找字体
+- https://chinese-font.netlify.app/zh-cn/cdn/
 - https://www.dafont.com/
 
-# 其他格式字体生成woff字体
+# 其他格式字体生成woff(2)字体
+- https://transfonter.org/
 - https://www.fontsquirrel.com/
 
 # svg图片生成字体图标
 - https://fontello.com/
 
-
+# 字体分包器
+- https://chinese-font.netlify.app/zh-cn/online-split/
 
