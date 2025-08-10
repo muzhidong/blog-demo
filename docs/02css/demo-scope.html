@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>scope规则</title>
+</head>
+<body>
+  <h3>示例一：独立块</h3>
+  <style>
+    @scope (.s1, .s2) to (span) {
+      :scope {
+        background-color: forestgreen;
+        /* 0 2 0 */
+        p,
+        .outer-p {
+          outline: 1px dashed black;
+        }
+      }
+
+      span {
+        font-size: 30px;
+      }
+    }
+  </style>
+  <div class="s1">
+    <p>
+      <span>@scope作用范围不包括scope end</span>
+      <span>...</span>
+    </p>
+    <p>
+      <span>:scope表示范围根元素</span>
+      <span>...</span>
+    </p>
+    <p>
+      <span>scope-start可以指定多个，逗号分隔</span>
+      <span>...</span>
+    </p>
+  </div>
+
+  <h3>示例二：以嵌入样式插入</h3>
+  <div class="s2">
+    <style>
+      /* @scope (.s2) to (span > *, label > * ) { */
+      @scope to (span > *, label > * ) {
+        background-color: sandybrown;
+
+        span,
+        label {
+          color: orange;
+        }
+
+        /* 0 1 0，此时&无作用，因为scope-start未指定 */
+        & .outer-p {
+          outline: 3px double red;
+        }
+
+        /* 样式被覆盖 */
+        /* .one span {
+          font-size: 20px;
+        }
+        .two span {
+          font-size: 30px;
+        } */
+
+      }
+      /* 0 1 0 */
+      .outer-p {
+        outline: 0 none;
+      }
+
+      /* 范围接近性解决样式覆盖问题 */
+      @scope (.one) {
+        span {
+          font-size: 20px;
+        }
+      }
+      @scope (.two) {
+        span {
+          font-size: 40px;
+        }
+      }
+    </style>
+    <p>
+      <span>使用:scope的声明优先级高于@scope</span>
+      <span>...<code>我是code，继承作用范围中的声明</code></span>
+      <span>...</span>
+      <label>我是label，通过limit > * 使作用范围对scope-end起效</label>
+    </p>
+    <p>
+      <span>scope-end可以指定多个，逗号分隔</span>
+      <span>...</span>
+    </p>
+    <p class="outer-p">
+      <span>:scope、&会提升选择器层级</span>
+      <span>...</span>
+    </p>
+    <div class="one">
+      <span>1</span>
+      <div class="two">
+        <span>2</span>
+        <div class="one">
+          <span>通过范围接近性解决样式覆盖问题</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
