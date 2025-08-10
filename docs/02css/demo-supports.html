@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>supports规则</title>
+</head>
+<body>
+  <h3>示例一：@supports条件是一个声明</h3>
+  <style>
+    .s1,
+    .tip {
+      display: none;
+    }
+
+    @supports (grid-template-rows: masonry) {
+      .s1 {
+        display: grid;
+        grid-template-columns: repeat(auto, minmax(100px, 1fr));
+        grid-template-rows: masonry;
+        counter-reset: c 0;    
+
+        & > div {
+          counter-increment: c 1;
+        }
+        & > div::after {
+          content: counter(c);
+        }
+      }
+    }
+
+    @supports not (grid-template-rows: masonry) {
+      .tip {
+        display: block;
+        &::before {
+          content: '目前浏览器暂不支持网格布局实现瀑布流效果'
+        }
+      }
+    }
+  </style>
+  <div class="s1">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+  <div class="tip"></div>
+
+  <h3>示例二：@supports条件是一个函数</h3>
+  <style>
+    @supports font-tech(color-colrv1) {
+      .colrv1 {
+        display: block;
+      }
+    }
+    @supports selector(:not(:is(a) > :where(:has(+ b)))) {
+      .pseudo-class {
+        display: block;
+      }
+    }
+  </style>
+  <div class="s2">
+    <div class="colrv1" hidden>支持color-colrv1字体</div>
+    <div class="pseudo-class" hidden>支持函数伪类</div>
+  </div>
+</body>
+</html>
