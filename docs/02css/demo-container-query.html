@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>容器查询</title>
+</head>
+<body>
+  <style>
+    @container (width > 800px) {
+      p {
+        color: orange;
+        background-color: greenyellow;
+      }
+    }
+
+    @container c1 (width > 800px) {
+      p:nth-child(2) {
+        font-size: 20px;
+      }
+    }
+
+    .c1 {
+      container: c1 / inline-size;
+    }
+  </style>
+  <h3>示例一：容器尺寸查询</h3>
+  <div class="c1">
+    <p>只要满足匿名容器的条件，容器元素都会应用</p>
+    <p>满足指定容器的条件，容器元素会应用样式</p>
+  </div>
+
+  <style>
+    @container pc (width > 375px) {
+      .c2 {
+        background-color: red;
+      }
+      .fs {
+        font-size: 20px;
+      }
+    }
+
+    @container mobile (width <= 375px) {
+      .fs {
+        font-size: 14px;
+      }
+    }
+
+    .c2 {
+      /* height: 100px;
+      container: pc mobile / size; */
+      container: pc mobile / inline-size;
+    }
+  </style>
+  <h3>示例二：container-type值size与inline-size的区别</h3>
+  <div class="c2">
+    <div>容器元素不参与查询</div>
+    <div class="fs">使用容器查询模拟媒体查询：设备宽度小于375px时字体为14px，大于则20px</div>
+    <div>当指定了容器名称和容器类型时，容器查询会应用contain属性，渲染性能比媒体查询好</div>
+    <div>container-type不同的值会触发contain不同的作用范围，比如size会计算块轴方向尺寸，而inline-size不会计算</div>
+  </div>
+
+  <style>
+    @container c3 scroll-state(scrollable: y) {
+      .child {
+        color: white;
+        background-color: green;
+      }
+    }
+    .c3 {
+      height: 100px;
+      border: 1px dashed orange;
+      overflow-y: scroll;
+      container: c3 / scroll-state;
+    }
+    .child {
+      height: 200px;
+    }
+  </style>
+  <h3>示例三：容器滚动状态查询</h3>
+  <div class="c3">
+    <div class="child">Safari和IOS不支持滚动状态查询，也不支持contain-type:scroll-state</div>
+  </div>
+
+  <style>
+    @container c4 (width > 800px) and style(--color: #000) {
+      div {
+        outline: 1px solid black;
+      }
+      span::before {
+        content: '我是span元素 ';
+      }
+    }
+    .c4 {
+      --color: #000;
+      container: c4 / inline-size;
+    }
+  </style>
+  <h3>示例四：容器样式查询</h3>
+  <div class="c4">
+    <div>FIXME:实验下来发现不支持一个CSS属性，或一个有效的声明，只支持自定义属性？</div>
+    <span>此处前面会插入一段文本</span>
+  </div>
+
+  <style>
+    @container parent (width > 800px) and (height > 50px) {
+      span {
+        color: white;
+      }
+      @container child style(--a: 1) {
+        span {
+          background-color: red;
+        }
+      }
+    }
+    .c5 {
+      /* 要检查height，container-type需设为size */
+      height: 100px;
+      container: parent card / size scroll-state;
+      p:first-child {
+        --a: 1;
+        container: child / inline-size;
+      }
+    }
+   
+  </style>
+  <h3>示例五：容器查询支持嵌套</h3>
+  <div class="c5">
+    <p>
+      <span>FIXME：容器查询不支持逗号分隔多个条件查询的写法？</span>
+    </p>
+  </div>
+</body>
+</html>
