@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <title>媒体查询</title>
+  <!-- 表示视口宽度为设备宽度，初识比例为1，最小比例为1，最大比例为1，不允许用户缩放页面 -->
+  <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
+
+  <!-- <style type="text/css">
+    @media screen and (min-width:320px) and (max-width:425px) {
+      body {
+        background: pink;
+      }
+    }
+
+    @media screen and (min-width:768px) and (max-width: 1440px) {
+      body {
+        background: orange;
+      }
+    }
+
+    @media screen and (min-width: 2560px) {
+      body{
+        background: yellow;
+      }
+    }
+  </style> -->
+
+  <!-- 建议不同媒体写在不同文件 -->
+  <link rel="stylesheet"
+        type="text/css"
+        href="./styles/a.css"
+        media="screen and (min-width:768px) and (max-width: 1440px)">
+  <link rel="stylesheet"
+        type="text/css"
+        href="./styles/b.css"
+        media="screen and (min-width:320px) and (max-width:425px)">
+  <link rel="stylesheet"
+        type="text/css"
+        href="./styles/c.css"
+        media="screen and (min-width: 2560px)">
+
+</head>
+
+<body>
+  <script>
+    const styleSheet = document.styleSheets
+    console.log(`获取整个文档样式信息（能看到全部，但能获取到的必需是实际加载的）:`, styleSheet);
+    for (const item in styleSheet) {
+      if (isNaN(item)) continue;
+      const { media } = styleSheet[item]
+      console.log(`media.mediaText：`, media.mediaText)
+    }
+
+    const matchMedia = window.matchMedia('(prefers-color-scheme: dark)')
+    if (matchMedia) {
+      matchMedia.addEventListener('change', function(e) {
+        // matches和media都是只读属性，分别表示是否匹配查询、序列化的媒体查询字符串
+        console.log(e instanceof MediaQueryListEvent, e.matches, e.media)
+        console.log('监听到媒体查询条件变化了')
+      })
+    }
+    console.log(`是否有设置偏好颜色主题，若有，是否是暗黑主题：${
+      matchMedia? '没有设置偏好主题': 
+      matchMedia.matches? '设置暗黑主题' : '设置亮白主题'}`)
+  </script>
+</body>
+
+</html>
