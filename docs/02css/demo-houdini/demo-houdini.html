@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Houdini</title>
+</head>
+<body>
+  <h3>示例一：通过CSS注册CSS自定义属性</h3>
+  <style>
+    @property --gradient-start {
+      syntax: "<color>";
+      inherits: false;
+      initial-value: white;
+    }
+    
+    .houdini1 {
+      --gradient-start: white;
+      width: 100px;
+      height: 100px;
+      outline: 1px dashed #27c;
+      outline-offset: 2px;
+      background: linear-gradient(var(--gradient-start), black);
+      transition: --gradient-start 1s;
+    }
+
+    .houdini1:hover {
+      --gradient-start: red;
+    }
+  </style>
+  <script>
+    // CSS.registerProperty({
+    //   name: '--gradient-start',
+    //   syntax: '<color>',
+    //   inherits: false,
+    //   initialValue: 'white',
+    // });
+  </script>
+  <div class="houdini1"></div>
+  
+  <h3>示例二：通过JS注册CSS自定义属性</h3>
+  <style>
+    /* @property --inner-radius {
+      syntax: '<length-percentage>';
+      inherits: false;
+      initial-value: 100%;
+    } */
+
+    .houdini2 {
+      --inner-radius: 50%;
+      --x: center;
+      --y: center;
+      width: 100px;
+      height: 100px;
+      outline: 1px dashed #27c;
+      outline-offset: 2px;
+      transition: --inner-radius .3s ease;
+      background-image: radial-gradient(
+        circle 50px at var(--x) var(--y), 
+        red 0%, 
+        red var(--inner-radius), 
+        black 0%
+      );
+      background-size: contain;
+    }
+
+    .houdini2:hover {
+      --inner-radius: 80%;
+    }
+  </style>
+  <script>
+    CSS.registerProperty({
+      name: "--inner-radius",
+      syntax: "<length-percentage>",
+      inherits: false,
+      initialValue: "100%",
+    });
+  </script>
+  <div class="houdini2"></div>
+
+  <h3>示例三：CSS TypedOM API操作</h3>
+  <style>
+    .houdini3 {
+      --a: 10%, red, 1em;
+      width: auto;
+      height: 100px;
+      margin-bottom: calc(1% + 5px);
+      background-color: #27c;
+      transform: scale(0.8) translateY(-10px);
+    }
+    .result {
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+      gap: 10px;
+      & > div {
+        outline: 1px dashed #27c;
+      }
+    }
+  </style>
+  <div class="houdini3"></div>
+  <div class="result"></div>
+  <script>
+    (function(){
+      const resultEl = document.querySelector('.result');
+      const el = document.querySelector('.houdini3');
+
+      const map = el.computedStyleMap();
+      el.textContent = `样式声明总数为：${map.size}`
+
+      const fragment = document.createDocumentFragment()
+      const getValueInfo = (value) => {
+        const type = value[Symbol.toStringTag]
+        switch(type) {
+          case 'CSSKeywordValue': 
+            return value.value;
+          case 'CSSUnitValue': 
+            return `${value.value}${value.unit}`
+          case 'CSSMathSum': 
+            return `${value.operator}(${value.values[0]},${value.values[1]})`
+          case 'CSSTransformValue': 
+          case 'CSSUnparsedValue': 
+            return [...value.values()]
+          default: 
+            return value.toString()
+        }
+      }
+      for(const [property, value] of map.entries()) {
+        if(!['--a', 'width', 'height', 
+          'margin-bottom', 'background-color', 'transform'].includes(property)) continue;
+        const item = document.createElement('div')
+        console.log(property, value[0])
+        item.textContent = `属性：${property}，值：${getValueInfo(value[0])}`
+        fragment.appendChild(item)
+      }
+      resultEl.appendChild(fragment)
+
+      const map2 = el.attributeStyleMap
+      map2.set('color', 'white')
+      map2.delete('color')
+      // ？Uncaught TypeError: Failed to execute 'append' on 'StylePropertyMap': Property does not support multiple values
+      // map2.append('opacity', 0.8)
+      map2.clear()
+
+      const styleValue = CSSStyleValue.parse('border', '1px solid red')
+      console.log(styleValue.toString())
+      const styleValue2 = CSSStyleValue.parseAll('background', 'red')
+      console.log(styleValue2[0].toString())
+    })() 
+  </script>
+
+  <style>
+    :root {
+      /* 放body会取不到值？*/
+      --paint-color: orange;
+      --paint-size: 200;
+    }
+    body {
+      /* 作用在background-image、border-image、content等属性上 */
+      background: paint(my-rect, 500, 100);
+    }
+  </style>
+  <script>
+    function fn() {
+      if (!CSS.paintWorklet) {
+        return;
+      }
+      const blobURL = URL.createObjectURL(new Blob(['(',
+        function () {
+          class MyRect {
+            // 传入函数参数类型
+            static get inputArguments() {
+              return ['<number>', '<number>'];
+            }
+            // 传入元素属性
+            static get inputProperties() {
+              return ['--paint-color', '--paint-size'];
+            }
+            // 参数依次表示绘制上下文、绘制大小、传入的元素属性、传入的函数参数
+            // 注意当窗口大小发生变化时，会重新触发paint方法
+            paint(ctx, paintSize, properties, args) {
+              const color = properties.get('--paint-color').toString()
+              const size = +properties.get('--paint-size').toString()
+              const startX = +args[0].toString()
+              const startY = +args[1].toString()
+              ctx.fillStyle = color
+              ctx.fillRect(startX, startY, size, size)
+            }
+          }
+          registerPaint('my-rect', MyRect);
+        }.toString(), ')()'], {
+          type: 'application/javascript'
+        })
+      );
+      // CSS API —— https://developer.mozilla.org/en-US/docs/Web/API/CSS
+      CSS.paintWorklet.addModule(blobURL);
+    }
+    fn()
+  </script>
+</body>
+</html>
