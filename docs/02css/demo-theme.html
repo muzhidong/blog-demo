@@ -3,22 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>主题切换</title>
+  <title>网站主题自动跟随系统主题</title>
   <style>
-    /* 挂载在body下 */
-    .dark { 
-      --bg-color: #1b1b1b;
-      --text-color: #fff;
-      --theme: '我是黑夜';
-    }
-    .light {
-      --bg-color: #fff;
-      --text-color: #1b1b1b;
-      --theme: '我是白间'
-    }
+    /* 方式一：CSS实现。无需支持手动切换主题下，使用该方式是最好的，与color-scheme:light dark;完美搭配；需支持手动切换主题下，要维护两份相同样式 */
     /* 利用prefers-color-scheme规则，跟随系统主题，通过:root伪类切换主题色 */
-    @media (prefers-color-scheme: dark) {
+    /* @media (prefers-color-scheme: dark) {
       :root:not(.dark):not(.light) {
+        color-scheme: dark;
         --bg-color: #1b1b1b;
         --text-color: #fff;
         --theme: '跟随主题黑';
@@ -26,13 +17,30 @@
     }
     @media (prefers-color-scheme: light) {
       :root:not(.dark):not(.light) {
+        color-scheme: light;
         --bg-color: #fff;
         --text-color: #1b1b1b;
         --theme: '跟随主题白';
       }
+    } */
+
+    /* 方式二：JS实现。逻辑更可控，且只需维护一份样式，无论是否需支持手动切换主题 */
+    /* 挂载在body下 */
+    .dark { 
+      color-scheme: dark;
+      --bg-color: #1b1b1b;
+      --text-color: #fff;
+      --theme: '我是黑夜';
+    }
+    .light {
+      color-scheme: light;
+      --bg-color: #fff;
+      --text-color: #1b1b1b;
+      --theme: '我是白间'
     }
 
     body { 
+      height: 120vh;
       color: var(--text-color);
       background-color: var(--bg-color);
     }
@@ -52,18 +60,42 @@
     }
   </style>
 </head>
-<body class="os">
+<body>
   <h3>主题切换</h3>
   <form onchange="toggleTheme(event)">
-    <label class="txt"><input type="radio" name="theme" value="os" checked/>跟随系统</label>
+    <label class="txt"><input type="radio" name="theme" value="" checked />跟随系统</label>
     <label class="txt"><input type="radio" name="theme" value="dark" />黑夜</label>
     <label class="txt"><input type="radio" name="theme" value="light" />白间</label>
   </form>
   <div class="theme">当前主题是：</div>
   <script>
-    function toggleTheme (e) {
+    // 通过matchMedia检查匹配指定媒体，并监听其变化
+    const media = window.matchMedia('(prefers-color-scheme:light)')
+    const changeTheme = (media, cb) => {
+      const isLight = media.matches
+      if (isLight) {
+        document.body.className = 'light'
+      } else {
+        document.body.className = 'dark'
+      }
+      cb && cb(isLight)
+    }
+    changeTheme(media)
+    media.addEventListener('change', (e) => {
+      changeTheme(e, (isLight) => {
+        console.log('监听到媒体查询变化了：', isLight? '变亮了': '变黑了')
+      })
+    })
+
+    // 手动切换主题
+    function toggleTheme(e) {
       const theme = e.target.value;
-      document.body.className = theme;
+      if (theme) {
+        document.body.className = theme;
+      } else {
+        // media是引用值，matches会随系统、用户代理改变
+        document.body.className = media.matches? 'light' : 'dark'
+      }
     }
   </script>
 </body>

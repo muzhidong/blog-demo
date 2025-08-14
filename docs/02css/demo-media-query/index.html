@@ -55,16 +55,11 @@
     }
 
     const matchMedia = window.matchMedia('(prefers-color-scheme: dark)')
-    if (matchMedia) {
-      matchMedia.addEventListener('change', function(e) {
-        // matches和media都是只读属性，分别表示是否匹配查询、序列化的媒体查询字符串
-        console.log(e instanceof MediaQueryListEvent, e.matches, e.media)
-        console.log('监听到媒体查询条件变化了')
-      })
-    }
-    console.log(`是否有设置偏好颜色主题，若有，是否是暗黑主题：${
-      matchMedia? '没有设置偏好主题': 
-      matchMedia.matches? '设置暗黑主题' : '设置亮白主题'}`)
+    console.log(`当前设置的是${matchMedia.matches ? '暗黑' : '亮白'}主题`)
+    matchMedia.addEventListener('change', function(e) {
+      // matches和media都是只读属性，分别表示是否匹配查询、序列化的媒体查询字符串
+      console.log('监听到媒体查询条件变化了,', e instanceof MediaQueryListEvent, e.matches, e.media)
+    })
   </script>
 </body>
 
