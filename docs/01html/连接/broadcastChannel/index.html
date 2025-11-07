@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>广播通道</title>
+  <style>
+    img {
+      display: none;
+      width: var(--size);
+      height: var(--size);
+      border: 1px solid black;
+      object-fit: contain;
+      cursor: move;
+      user-select: none;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <!-- 该示例仅考虑同一浏览器的不同标签页，未考虑iframe场景 -->
+  <script>
+    let offsetX
+    let offsetY
+    const size = 200
+
+    const imgEl = document.createElement('img');
+    imgEl.src = `${[2, 5, 10][Math.floor(Math.random() * 3)]}.jpeg`
+    imgEl.draggable = false
+    imgEl.style.setProperty('--size', `${size}px`);
+    imgEl.addEventListener('load', () => {
+      imgEl.style.display = 'block';
+      offsetX = imgEl.offsetLeft + size / 2
+      offsetY = imgEl.offsetTop + size /2
+    })
+    document.body.appendChild(imgEl);
+
+    const broadcastChannel = new BroadcastChannel('move');
+    broadcastChannel.addEventListener('message', (e) => {
+      const {
+        screenX,
+        screenY
+      } = e.data
+      const windowOffsetLeft = window.screenLeft + offsetX
+      // Safari浏览器下screenTop是负数
+      const windowOffsetTop = Math.abs(window.screenTop) + window.outerHeight - window.innerHeight + offsetY
+      // console.log(windowOffsetLeft, window.screenTop, windowOffsetTop)
+      imgEl.style.transform = `translate(${screenX - windowOffsetLeft}px, ${screenY - windowOffsetTop}px)`
+    })
+
+    let isMouseDown = false
+    imgEl.addEventListener('mousedown', (e) => {
+      isMouseDown = true
+    })
+    imgEl.addEventListener('mousemove', (e) => {
+      if (!isMouseDown) return
+
+      const {
+        pageX,
+        pageY,
+        clientX,
+        clientY,
+        screenX,
+        screenY
+      } = e
+      const currentX = pageX || clientX
+      const currentY = pageY || clientY
+
+      const moveX = currentX - offsetX
+      const moveY = currentY - offsetY
+      imgEl.style.transform = `translate(${moveX}px, ${moveY}px)`
+      // console.log(moveX, moveY, screenX, screenY)
+      broadcastChannel.postMessage({
+        screenX,
+        screenY
+      })
+    })
+    document.addEventListener('mouseup', () => {
+      isMouseDown = false
+    })
+
+    window.addEventListener('beforeunload', () => {
+      broadcastChannel.close()
+      broadcastChannel = null;
+    })
+  </script>
+</body>
+</html>
