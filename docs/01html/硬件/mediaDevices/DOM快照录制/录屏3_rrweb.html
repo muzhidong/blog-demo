@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>录屏3_rrweb</title>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/style.css" />
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/rrweb-player@latest/dist/style.css" />
+</head>
+<body>
+  <div id="app">
+    <button @click="handleStart">开启录制</button>
+    <button @click="handleStop">结束录制</button>
+    <button @click="handleReplay">播放录制</button>
+    <div class="replay" ref="replayRef"></div>
+  </div>
+</body>
+</html>
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script src="https://unpkg.com/element-plus@2.3.1/dist/index.full.min.js"></script>
+<!-- FIXME:Refused to execute script from 'https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.umd.min.cjs' 
+ because its MIME type ('application/node') is not executable, and strict MIME type checking is enabled. -->
+<script src="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.umd.min.cjs"></script>
+<script src="https://cdn.jsdelivr.net/npm/rrweb-player@latest/dist/rrweb-player.umd.cjs"></script>
+<script type="module">
+// 用户无感
+// 产物相对较小
+// 可操作性强，支持数据脱敏、加密
+// 回放清晰度高保真
+
+const { createApp, reactive, ref } = Vue;
+
+createApp({
+  setup() {
+    const replayRef = ref();
+    const state = reactive({
+      events: [],
+      stopFn: null,
+    });
+
+    const handleStart = () => {
+      state.stopFn = rrweb.record({
+        emit(event) {
+          if (state.events.length > 100) {
+            // 当事件数量大于 100 时停止录制
+            handleStop();
+          } else {
+            state.events.push(event);
+          }
+        },
+      });
+      ElMessage('开始录制');
+    };
+
+    const handleStop = () => {
+      state.stopFn?.();
+      ElMessage('已停止录制');
+    };
+
+    const handleReplay = () => {
+      new rrwebPlayer({
+        target: replayRef.value, // 可以自定义 DOM 元素
+        // 配置项
+        props: {
+          events: state.events,
+        },
+      });
+    };
+
+    return {
+      replayRef,
+      handleStart,
+      handleStop,
+      handleReplay,
+    }
+  }
+}).mount('#app');
+</script>

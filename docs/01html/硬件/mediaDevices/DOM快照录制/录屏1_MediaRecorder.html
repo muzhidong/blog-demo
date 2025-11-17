@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>录屏1_MediaRecorder</title>
+  <style>
+    video {
+      display: block;
+      width: 400px;
+      height: 400px;
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <video ref="playerRef"></video>
+    <button @click="handleStart">开启录制</button>
+    <button @click="handlePause">暂停录制</button>
+    <button @click="handleResume">继续录制</button>
+    <button @click="handleStop">结束录制</button>
+    <button @click="handleReplay">播放录制</button>
+    <button @click="handleReset">重置</button>
+    <button @click="handleDownload">下载录制视频</button>
+  </div>
+</body>
+</html>
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script type="module">
+// 用户能感知
+// 产物大
+// 可操作性弱
+// 回放清晰度由录制清晰度决定，有损录制
+const { createApp, ref, reactive } = Vue;
+createApp({
+  setup() {
+    const playerRef = ref();
+    const state = reactive({
+      mediaRecorder: null,
+      blobs: [],
+    });
+
+    // 开始录制，录制屏幕
+    const handleStart = async () => {
+      const stream = await navigator.mediaDevices.getDisplayMedia();
+      state.mediaRecorder = new MediaRecorder(stream, {
+        mimeType: 'video/webm',
+      });
+      state.mediaRecorder.addEventListener('dataavailable', (e) => {
+        state.blobs.push(e.data);
+      });
+      state.mediaRecorder?.start();
+    };
+
+    // 录制canvas
+    // const handleCanvasRecord = () => {
+    //   const stream = canvas.captureStream(60); // 60 FPS recording
+    //   const blobs = [];
+    //   const recorder = new MediaRecorder(stream, {
+    //     mimeType: 'video/webm;codecs=vp9',
+    //   });
+    //   recorder.ondataavailable = (e) => {
+    //     blobs.push(e.data);
+    //   };
+    // }
+
+    // 暂停录制
+    const handlePause = () => {
+      state.mediaRecorder?.pause()
+    };
+
+    // 继续录制
+    const handleResume = () => {
+      state.mediaRecorder?.resume()
+    };
+
+    // 停止录制
+    const handleStop = () => {
+      state.mediaRecorder?.stop()
+    };
+
+    // 播放录制
+    const handleReplay = () => {
+      if (state.blobs.length === 0 || !playerRef.value) return;
+      const blob = new Blob(state.blobs, { type: 'video/webm' });
+      playerRef.value.src = URL.createObjectURL(blob);
+      playerRef.value.play();
+    };
+
+    // 重置
+    const handleReset = () => {
+      state.blobs = [];
+      state.mediaRecorder = null;
+      playerRef.value.src = null;
+    };
+
+    // 下载录制视频
+    const handleDownload = () => {
+      if (state.blobs.length === 0) return;
+      const blob = new Blob(state.blobs, { type: 'video/webm' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.style.display = 'none';
+      a.download = 'record.webm';
+      a.click();
+    };
+
+    return {
+      playerRef,
+      handleStart,
+      handlePause,
+      handleResume,
+      handleStop,
+      handleReplay,
+      handleReset,
+      handleDownload,
+    };
+  },
+}).mount('#app');
+</script>

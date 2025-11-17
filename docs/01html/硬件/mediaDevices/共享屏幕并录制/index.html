@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge;chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		 <!-- 
+				谷歌浏览器启用实验性Web平台特性：
+				1、url输入chrome://flags/#enable-experimental-web-platform-features
+				2、启动该选项
+				3、重启浏览器
+		 -->
+		<title>共享屏幕并录制</title>
+		<style>
+			body{
+				display: flex;
+				flex-direction: column;
+				padding: 10px;
+			}
+			video{
+				width: 400px;
+				height: 200px;
+				border: 1px solid green;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>共享屏幕并录制</h1>
+		<div id="share"></div>
+		<div>
+			<button id="btnStartOrStop">开始</button>
+			<button id="btnPauseOrResume">暂停</button>
+		</div>
+		<video id="record" controls></video>
+	</body>
+	<script src="./shareScreen.js"></script>
+	<script src="./recordScreen.js" defer></script>
+	<script>
+		window.addEventListener("DOMContentLoaded", function() {
+			// 共享屏幕窗口(可能是某个网页、整个浏览器窗口、整个屏幕) 并录屏
+			initSharingScreenAndRecording();
+		}, false);
+	</script>
+</html>

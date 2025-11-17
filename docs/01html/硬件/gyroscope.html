@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
+  <title>陀螺仪_摇一摇</title>
+</head>
+<body>
+  <div>应用场景：</div>
+  <div>❌视差效果（Parallax.js）</div>
+  <div>❌全景漫游（腾讯地图的街景体验）</div>
+  <div>❌游戏控制（控制车辆移动方向或滚珠移动）</div>
+  <div>✅手机摇一摇</div>
+  <script>
+    var SHAKE_SPEED_THRESHOLD = 300;
+    var lastTime = 0;
+    var x = y = z = lastX = lastY = lastZ = 0;
+    window.addEventListener('devicemotion', function(e){
+      var currentTime = Date.now();
+      var diffTime = currentTime - lastTime;
+
+      if(diffTime > 120){
+        const {
+          x,
+          y,
+          z,
+        } = e.accelerationIncludingGravity;
+
+        var speed = Math.abs(x + y + z - lastX - lastY - lastZ) / diffTime * 1000;
+        if(speed > SHAKE_SPEED_THRESHOLD){
+          alert('摇动了手机');
+        }
+
+        lastTime = currentTime;
+        lastX = x;
+        lastY = y;
+        lastZ = z;
+      }
+    }); 
+  </script>
+</body>
+</html>

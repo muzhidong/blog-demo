@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge;chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		 <!-- 
+				谷歌浏览器启用实验性Web平台特性：
+				1、url输入chrome://flags/#enable-experimental-web-platform-features
+				2、启动该选项
+				3、重启浏览器
+		 -->
+		<title>访问摄像头并截图</title>
+		<style>
+			body{
+				display: flex;
+				flex-direction: column;
+				padding: 10px;
+			}
+			video{
+				width: 400px;
+				height: 200px;
+				border: 1px solid green;
+			}
+			#snap{
+				margin: 10px 0;
+			}
+			#img{
+				width: 400px;
+				height: 200px;
+				object-fit: contain;
+				border: 1px solid pink;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>投屏截图</h1>
+		<video id="video" ></video>
+		<button id="snap">Snap Photo</button>
+		<img id="img" />
+		<!-- 设置图片像素比-->
+		<canvas id="canvas" width="400" height="200" hidden></canvas>
+	</body>
+	<script src="./captureScreen.js"></script>
+	<script>
+		window.addEventListener("DOMContentLoaded", function() {
+			initCapturingScreen();
+		}, false);
+
+		function initCapturingScreen() {
+			var canvas = document.getElementById("canvas");
+			var context = canvas.getContext("2d");
+			var imgEl = document.querySelector('#img');
+
+			var snapEl = document.getElementById("snap");
+			snapEl.addEventListener("click", function () {
+				// 4、截图
+				context.drawImage(videoEl, 0, 0, canvas.getAttribute('width'), canvas.getAttribute('height'));
+				imgEl.src = canvas.toDataURL();
+			});
+
+			var videoEl = document.getElementById("video");
+			videoEl.addEventListener('loadedmetadata', function () {
+				// 3、元数据加载完毕时播放视频
+				this.play();
+			}, false);
+
+
+			var media = navigator.mediaDevices;
+			if (media) {
+				// 1、获取摄像头
+				media.getUserMedia({
+					video: {
+						// 分辨率
+						width: 5000,
+						height: 5000
+						// 移动设备，前置摄像头
+						// facingMode: 'user',
+						// 移动设备，后置摄像头
+						// facingMode: {exact: 'environment'}
+					}
+				})
+					.then(function (stream) {
+						// 2、绑定视频流对象
+						videoEl.srcObject = stream;
+					})
+					.catch(function (error) {
+						console.log("get camera error: ", error);
+					});
+			}
+		}
+	</script>
+</html>

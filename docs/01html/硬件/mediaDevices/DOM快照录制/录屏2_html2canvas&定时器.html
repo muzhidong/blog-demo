@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>录屏2_html2canvas&定时器</title>
+  <style>
+    img {
+      display: block;
+      width: 400px;
+      height: 400px;
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <button @click="handleStart">开启录制</button>
+    <button @click="handleStop">停止录制</button>
+    <button @click="handleReplay">播放录制</button>
+    <button @click="handleReset">重置</button>
+    <img v-if="state.visible" :src="state.imgs[state.num ?? 0]" />
+  </div>
+</body>
+</html>  
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script type="module">
+// 用户无感知
+// 产物大
+// 可操作性弱
+// 回放清晰度由录制清晰度决定，有损录制
+const { createApp, reactive } = Vue;
+
+createApp({
+  setup() {
+    const state = reactive({
+      visible: false,
+      imgs: [],
+      num: 0,
+      recordInterval: null,
+      replayInterval: null,
+    });
+
+    const FPS = 30;
+    const interval = 1000 / FPS;
+
+    const handleStart = async () => {
+      handleReset();
+      state.recordInterval = setInterval(() => {
+        if (state.imgs.length > 100) {
+          handleStop();
+          return;
+        }
+        html2canvas(document.body).then((canvas) => {
+          const img = canvas.toDataURL();
+          state.imgs.push(img);
+        });
+      }, interval);
+    };
+
+    const handleStop = () => {
+      state.recordInterval && clearInterval(state.recordInterval);
+    };
+
+    const handleReplay = async () => {
+      state.recordInterval && clearInterval(state.recordInterval);
+      state.num = 0;
+      state.visible = true;
+      state.replayInterval = setInterval(() => {
+        if (state.num >= state.imgs.length - 1) {
+          clearInterval(state.replayInterval);
+          return;
+        }
+        state.num++;
+      }, interval);
+    };
+
+    const handleReset = () => {
+      state.imgs = [];
+      state.recordInterval = null;
+      state.replayInterval = null;
+      state.num = 0;
+      state.visible = false;
+    };
+    return {
+      state,
+      handleStart,
+      handleStop,
+      handleReplay,
+      handleReset,
+    };
+  },
+}).mount('#app');
+</script>

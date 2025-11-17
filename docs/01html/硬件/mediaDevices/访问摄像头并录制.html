@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
+  <title>访问摄像头并录制</title>
+  <style>
+    #video-record {
+      border: 1px solid black;
+    }
+    #btn-record {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <video id="video-source"
+           autoplay
+           muted></video>
+    <button id="btn-record"
+            disabled>开始录制</button>
+  </div>
+  <div>
+    <div>录制结果：</div>
+    <video id="video-record"
+           width="400"
+           height="400"
+           autoplay
+           loop></video>
+  </div>
+</body>
+<script>
+  window.addEventListener('load', function () {
+    // 获取元素
+    var sourceVideoEl = document.querySelector('#video-source');
+    var recordVideoEl = document.querySelector('#video-record');
+    var recordBtnEl = document.querySelector('#btn-record');
+
+    // 访问摄像头
+    var constraint = {
+      audio: true,
+      video: {
+        width: 320
+      }
+    }
+    function onSuccess(stream) {
+      recordBtnEl.disabled = false;
+      sourceVideoEl.srcObject = stream;
+      // 缓存流，用于录制视频
+      window.stream = stream;
+    }
+    function onFailure(err) {
+      console.log(`获取媒体错误`, err);
+    }
+    if (navigator.mediaDevices) {
+      navigator.mediaDevices.getUserMedia(constraint).then(onSuccess).catch(onFailure);
+    }
+
+    // 按钮绑定事件
+    recordBtnEl.addEventListener('click', function () {
+      if (this.textContent === '开始录制') {
+        startRecording();
+      } else {
+        stopRecording();
+        this.textContent = '开始录制';
+      }
+    }, false);
+
+    // 录制相关
+    var mimeTypes = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'];
+    var mediaRecorder;
+    var recordBlob;
+    function startRecording() {
+      var mimeType = mimeTypes.find(type => MediaRecorder.isTypeSupported(type));
+      try {
+        // 创建媒体录制器
+        mediaRecorder = new MediaRecorder(window.stream, { mimeType });
+      } catch (error) {
+        alert('创建媒体录制器异常');
+        return;
+      }
+      recordBlob = [];
+      mediaRecorder.addEventListener('dataavailable', function (e) {
+        if (e.data && e.data.size > 0) {
+          // 存储媒体数据
+          recordBlob.push(e.data);
+        }
+      }, false);
+      // 开始录制
+      mediaRecorder.start(10);
+      recordBtnEl.textContent = '停止录制';
+    }
+
+    function stopRecording() {
+      // 停止录制
+      mediaRecorder.stop();
+      // 展示录制结果
+      var buff = new Blob(recordBlob, { type: 'video/webm' });
+      recordVideoEl.src = window.URL.createObjectURL(buff);
+    }
+  }, false)
+</script>
+</html>
